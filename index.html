@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en" id="html">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#ff6b35">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PriceHunt">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon.svg">
+<title>PriceHunt — Best Prices Globally</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080810;--s1:#0f0f1a;--s2:#161622;--s3:#1c1c2a;
+  --border:#222230;--acc:#ff6b35;--acc2:#ff9a6c;--acc3:#ffcc02;
+  --blue:#4a9eff;--green:#00d4aa;--red:#ff4757;
+  --text:#f0f0f8;--text2:#9090b0;--text3:#555570;
+  --r:14px;--r-sm:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;}
+
+/* LAYOUT */
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh;}
+.topbar{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--s1);border-bottom:1px solid var(--border);flex-shrink:0;}
+.logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--acc);flex-shrink:0;}
+.logo span{color:var(--text2);font-weight:400;font-size:13px;margin-left:4px;}
+.search-wrap{flex:1;position:relative;}
+.search-wrap input{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:24px;padding:9px 16px 9px 38px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;}
+.search-wrap input:focus{outline:none;border-color:var(--acc);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;}
+.search-btn{background:var(--acc);border:none;border-radius:20px;padding:8px 14px;color:white;font-weight:600;font-size:12px;cursor:pointer;flex-shrink:0;}
+
+.content{flex:1;overflow-y:auto;overflow-x:hidden;}
+.bottomnav{display:flex;background:var(--s1);border-top:1px solid var(--border);flex-shrink:0;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border:none;background:none;color:var(--text3);cursor:pointer;font-size:10px;font-family:'Inter',sans-serif;transition:color .15s;}
+.nav-btn.active{color:var(--acc);}
+.nav-btn .ni{font-size:18px;}
+
+/* PAGES */
+.page{display:none;padding:16px;}
+.page.active{display:block;}
+
+/* HERO SEARCH */
+.hero{text-align:center;padding:24px 16px 16px;}
+.hero h1{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:8px;}
+.hero h1 span{color:var(--acc);}
+.hero p{color:var(--text2);font-size:13px;margin-bottom:20px;}
+.hero-search{display:flex;gap:8px;max-width:500px;margin:0 auto 20px;}
+.hero-search input{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:12px;padding:12px 16px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;}
+.hero-search input:focus{outline:none;border-color:var(--acc);}
+.hero-search button{background:var(--acc);border:none;border-radius:12px;padding:12px 20px;color:white;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap;}
+
+/* CATEGORIES */
+.cats{display:flex;gap:8px;overflow-x:auto;padding:0 0 4px;scrollbar-width:none;margin-bottom:16px;}
+.cats::-webkit-scrollbar{display:none;}
+.cat{flex-shrink:0;background:var(--s2);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.cat:hover,.cat.active{background:rgba(255,107,53,.15);border-color:var(--acc);color:var(--acc);}
+
+/* CARDS */
+.section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.see-all{font-size:12px;color:var(--acc);cursor:pointer;font-weight:500;}
+
+.deals-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.deal-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:12px;cursor:pointer;transition:all .15s;position:relative;}
+.deal-card:hover{border-color:var(--acc);transform:translateY(-1px);}
+.deal-img{width:100%;height:80px;background:var(--s2);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:10px;}
+.deal-badge{position:absolute;top:8px;right:8px;background:var(--red);color:white;font-size:10px;font-weight:700;padding:2px 6px;border-radius:20px;}
+.deal-badge.hot{background:var(--acc);}
+.deal-badge.new{background:var(--blue);}
+.deal-name{font-size:12px;font-weight:500;margin-bottom:4px;line-height:1.3;}
+.deal-store{font-size:10px;color:var(--text3);margin-bottom:6px;}
+.deal-prices{display:flex;align-items:center;gap:6px;}
+.deal-price-now{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--acc);}
+.deal-price-was{font-size:11px;color:var(--text3);text-decoration:line-through;}
+.deal-save{font-size:10px;color:var(--green);font-weight:600;}
+
+/* PRODUCT LIST */
+.product-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px;}
+.product-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:12px;cursor:pointer;transition:all .15s;}
+.product-card:hover{border-color:var(--acc);}
+.product-img{width:64px;height:64px;background:var(--s2);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.product-info{flex:1;min-width:0;}
+.product-name{font-size:13px;font-weight:500;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.product-meta{font-size:11px;color:var(--text2);margin-bottom:6px;}
+.product-bottom{display:flex;align-items:center;justify-content:space-between;}
+.product-price{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--acc);}
+.product-stores{font-size:11px;color:var(--text3);}
+.product-drop{font-size:11px;color:var(--green);font-weight:600;}
+
+/* PRICE COMPARISON */
+.price-comp{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px;}
+.price-comp-header{padding:14px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center;}
+.price-comp-img{width:60px;height:60px;background:var(--s2);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.price-comp-info h3{font-size:14px;font-weight:600;margin-bottom:4px;}
+.price-comp-info p{font-size:12px;color:var(--text2);}
+.store-row{display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border);gap:10px;cursor:pointer;transition:background .15s;}
+.store-row:last-child{border:none;}
+.store-row:hover{background:var(--s2);}
+.store-logo{width:32px;height:32px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.store-name{flex:1;font-size:13px;font-weight:500;}
+.store-info{font-size:11px;color:var(--text2);}
+.store-price{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;}
+.store-price.best{color:var(--green);}
+.store-btn{background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:6px 10px;font-size:11px;font-weight:600;cursor:pointer;color:var(--text);white-space:nowrap;}
+.store-btn.best{background:var(--acc);border-color:var(--acc);color:white;}
+.best-tag{font-size:9px;background:var(--green);color:#000;font-weight:700;padding:2px 5px;border-radius:10px;}
+
+/* STATS ROW */
+.stats-row{display:flex;gap:10px;margin-bottom:16px;}
+.stat-pill{flex:1;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:12px;text-align:center;}
+.stat-pill-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--acc);}
+.stat-pill-label{font-size:10px;color:var(--text2);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
+
+/* WATCHLIST */
+.watchlist-item{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px;display:flex;gap:12px;align-items:center;margin-bottom:10px;}
+.watch-img{width:48px;height:48px;background:var(--s2);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.watch-info{flex:1;}
+.watch-name{font-size:13px;font-weight:500;margin-bottom:2px;}
+.watch-target{font-size:11px;color:var(--text2);}
+.watch-current{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+.watch-current.hit{color:var(--green);}
+.watch-current.close{color:var(--acc);}
+.watch-bell{font-size:18px;cursor:pointer;}
+
+/* PREMIUM */
+.premium-card{background:linear-gradient(135deg,#1a1020,#0f1525);border:1px solid rgba(255,107,53,.3);border-radius:var(--r);padding:20px;margin-bottom:16px;text-align:center;}
+.premium-card h2{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px;}
+.premium-card h2 span{color:var(--acc);}
+.premium-card p{font-size:13px;color:var(--text2);margin-bottom:16px;}
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.plan{background:var(--s2);border:1px solid var(--border);border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;transition:all .15s;}
+.plan.popular{border-color:var(--acc);background:rgba(255,107,53,.08);}
+.plan-name{font-size:12px;color:var(--text2);margin-bottom:4px;}
+.plan-price{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);}
+.plan-price span{font-size:12px;font-weight:400;color:var(--text2);}
+.plan-save{font-size:10px;color:var(--green);font-weight:600;margin-top:2px;}
+.plan-popular{font-size:9px;background:var(--acc);color:white;padding:2px 8px;border-radius:20px;margin-bottom:6px;display:inline-block;}
+.features{text-align:left;margin-bottom:16px;}
+.feature{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.feature:last-child{border:none;}
+.feature-icon{font-size:14px;flex-shrink:0;}
+.subscribe-btn{background:linear-gradient(135deg,var(--acc),#ff4500);border:none;border-radius:var(--r);padding:14px;width:100%;color:white;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;}
+
+/* PROFILE */
+.profile-header{text-align:center;padding:20px 0 16px;}
+.profile-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#ff4500);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;}
+.profile-name{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;}
+.profile-plan{font-size:12px;color:var(--acc);margin-top:4px;}
+.menu-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--s1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;cursor:pointer;}
+.menu-item-icon{font-size:18px;width:24px;text-align:center;}
+.menu-item-label{flex:1;font-size:14px;}
+.menu-item-arrow{color:var(--text3);font-size:14px;}
+
+/* SEARCH RESULTS */
+.filter-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:12px;}
+.filter-row::-webkit-scrollbar{display:none;}
+.filter{flex-shrink:0;background:var(--s2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;cursor:pointer;transition:all .15s;}
+.filter.active{background:rgba(255,107,53,.15);border-color:var(--acc);color:var(--acc);}
+
+/* INSTALL BANNER */
+.install-banner{background:linear-gradient(135deg,rgba(255,107,53,.15),rgba(255,154,108,.08));border:1px solid rgba(255,107,53,.3);border-radius:var(--r);padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.install-banner-text{flex:1;}
+.install-banner-text h4{font-size:13px;font-weight:600;margin-bottom:2px;}
+.install-banner-text p{font-size:11px;color:var(--text2);}
+.install-banner button{background:var(--acc);border:none;border-radius:var(--r-sm);padding:8px 12px;color:white;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;}
+
+/* TOAST */
+.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--border);border-radius:24px;padding:10px 20px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:32px;color:var(--text2);font-size:13px;}
+.spin{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--acc);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+@media(max-width:380px){
+  .deals-grid{grid-template-columns:1fr;}
+  .plan-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="logo">PriceHunt<span>🔍</span></div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="top-search" placeholder="Search products..." onkeydown="if(event.key==='Enter')doSearch(this.value)">
+    </div>
+    <button class="search-btn" onclick="doSearch(document.getElementById('top-search').value)">Go</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="content">
+
+    <!-- HOME -->
+    <div id="page-home" class="page active">
+      <div id="install-wrap" style="display:none">
+        <div class="install-banner">
+          <span style="font-size:28px">📲</span>
+          <div class="install-banner-text">
+            <h4>Install PriceHunt</h4>
+            <p>Add to home screen for instant price alerts</p>
+          </div>
+          <button onclick="installPWA()">Install</button>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-pill"><div class="stat-pill-val">2.4M</div><div class="stat-pill-label">Products</div></div>
+        <div class="stat-pill"><div class="stat-pill-val">12K</div><div class="stat-pill-label">Stores</div></div>
+        <div class="stat-pill"><div class="stat-pill-val">$2.1M</div><div class="stat-pill-label">Saved today</div></div>
+      </div>
+
+      <div class="cats" id="cats">
+        <div class="cat active" onclick="filterCat(this,'all')">🔥 All</div>
+        <div class="cat" onclick="filterCat(this,'electronics')">📱 Electronics</div>
+        <div class="cat" onclick="filterCat(this,'fashion')">👗 Fashion</div>
+        <div class="cat" onclick="filterCat(this,'home')">🏠 Home</div>
+        <div class="cat" onclick="filterCat(this,'sports')">⚽ Sports</div>
+        <div class="cat" onclick="filterCat(this,'beauty')">💄 Beauty</div>
+        <div class="cat" onclick="filterCat(this,'food')">🛒 Food</div>
+        <div class="cat" onclick="filterCat(this,'travel')">✈️ Travel</div>
+        <div class="cat" onclick="filterCat(this,'gaming')">🎮 Gaming</div>
+        <div class="cat" onclick="filterCat(this,'books')">📚 Books</div>
+      </div>
+
+      <div class="section-title">🔥 Hot Deals <span class="see-all" onclick="navTo('deals')">See all</span></div>
+      <div class="deals-grid" id="hot-deals"></div>
+
+      <div class="section-title">📉 Biggest Price Drops <span class="see-all" onclick="navTo('search')">Search</span></div>
+      <div class="product-list" id="price-drops"></div>
+    </div>
+
+    <!-- SEARCH / RESULTS -->
+    <div id="page-search" class="page">
+      <div class="hero">
+        <h1>Find the <span>Best Price</span></h1>
+        <p>Compare prices across 12,000+ stores worldwide</p>
+        <div class="hero-search">
+          <input type="text" id="hero-search" placeholder="iPhone 16, Nike Air Max, PS5...">
+          <button onclick="doSearch(document.getElementById('hero-search').value)">Search</button>
+        </div>
+      </div>
+
+      <div id="search-results-wrap" style="display:none">
+        <div class="filter-row">
+          <div class="filter active">All results</div>
+          <div class="filter" onclick="sortBy('price')">💰 Lowest price</div>
+          <div class="filter" onclick="sortBy('discount')">% Biggest deal</div>
+          <div class="filter" onclick="sortBy('rating')">⭐ Top rated</div>
+          <div class="filter" onclick="sortBy('new')">🆕 New arrivals</div>
+        </div>
+        <div id="search-results"></div>
+      </div>
+
+      <div id="search-empty">
+        <div class="section-title">🌍 Top global stores</div>
+        <div class="product-list" id="featured-stores"></div>
+      </div>
+    </div>
+
+    <!-- PRODUCT DETAIL -->
+    <div id="page-product" class="page">
+      <div id="product-detail"></div>
+    </div>
+
+    <!-- WATCHLIST -->
+    <div id="page-watch" class="page">
+      <div class="section-title">🔔 Price Alerts</div>
+      <div id="watchlist-items"></div>
+      <div style="text-align:center;padding:16px 0">
+        <button class="subscribe-btn" style="max-width:300px" onclick="navTo('premium')">
+          🔔 Set Price Alert (Premium)
+        </button>
+      </div>
+    </div>
+
+    <!-- PREMIUM -->
+    <div id="page-premium" class="page">
+      <div class="premium-card">
+        <h2>Go <span>Premium</span> 🚀</h2>
+        <p>Unlimited searches, price alerts & exclusive deals</p>
+        <div class="plan-grid">
+          <div class="plan" onclick="selectPlan('monthly')">
+            <div class="plan-name">Monthly</div>
+            <div class="plan-price">$4.99<span>/mo</span></div>
+          </div>
+          <div class="plan popular" onclick="selectPlan('yearly')">
+            <div class="plan-popular">BEST VALUE</div>
+            <div class="plan-name">Yearly</div>
+            <div class="plan-price">$2.99<span>/mo</span></div>
+            <div class="plan-save">Save 40%</div>
+          </div>
+        </div>
+        <div class="features">
+          <div class="feature"><span class="feature-icon">🔍</span>Unlimited product searches</div>
+          <div class="feature"><span class="feature-icon">🔔</span>Price drop alerts (instant)</div>
+          <div class="feature"><span class="feature-icon">📊</span>Price history charts</div>
+          <div class="feature"><span class="feature-icon">🌍</span>All 12,000+ global stores</div>
+          <div class="feature"><span class="feature-icon">🤖</span>AI price predictions</div>
+          <div class="feature"><span class="feature-icon">📱</span>Multi-device sync</div>
+          <div class="feature"><span class="feature-icon">⚡</span>Early access to deals</div>
+          <div class="feature"><span class="feature-icon">🛒</span>Shopping list with auto-alerts</div>
+        </div>
+        <button class="subscribe-btn" onclick="subscribe()" id="sub-btn">🚀 Start Free 7-Day Trial</button>
+        <p style="font-size:11px;color:var(--text3);margin-top:10px">Cancel anytime · No credit card to start trial</p>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="page-profile" class="page">
+      <div class="profile-header">
+        <div class="profile-avatar">👤</div>
+        <div class="profile-name" id="profile-name">Guest User</div>
+        <div class="profile-plan" id="profile-plan">Free Plan · 3 searches left today</div>
+      </div>
+      <div class="menu-item" onclick="navTo('premium')"><span class="menu-item-icon">⭐</span><span class="menu-item-label">Upgrade to Premium</span><span class="menu-item-arrow">›</span></div>
+      <div class="menu-item" onclick="navTo('watch')"><span class="menu-item-icon">🔔</span><span class="menu-item-label">Price Alerts</span><span class="menu-item-arrow">›</span></div>
+      <div class="menu-item" onclick="enablePush()"><span class="menu-item-icon">📲</span><span class="menu-item-label">Enable Notifications</span><span class="menu-item-arrow" id="notif-status">›</span></div>
+      <div class="menu-item" onclick="installPWA()"><span class="menu-item-icon">📱</span><span class="menu-item-label">Install App</span><span class="menu-item-arrow">›</span></div>
+      <div class="menu-item"><span class="menu-item-icon">🌍</span><span class="menu-item-label">Currency & Region</span><span class="menu-item-arrow">›</span></div>
+      <div class="menu-item"><span class="menu-item-icon">📊</span><span class="menu-item-label">My Savings</span><span class="menu-item-arrow">›</span></div>
+      <div class="menu-item"><span class="menu-item-icon">❓</span><span class="menu-item-label">Help & Support</span><span class="menu-item-arrow">›</span></div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottomnav">
+    <button class="nav-btn active" onclick="navTo('home',this)" id="nav-home"><span class="ni">🏠</span>Home</button>
+    <button class="nav-btn" onclick="navTo('search',this)" id="nav-search"><span class="ni">🔍</span>Search</button>
+    <button class="nav-btn" onclick="navTo('watch',this)" id="nav-watch"><span class="ni">🔔</span>Alerts</button>
+    <button class="nav-btn" onclick="navTo('premium',this)" id="nav-premium"><span class="ni">⭐</span>Premium</button>
+    <button class="nav-btn" onclick="navTo('profile',this)" id="nav-profile"><span class="ni">👤</span>Profile</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// === MOCK DATA ===
+const DEALS = [
+  {id:1,name:'iPhone 16 Pro 256GB',store:'Amazon',emoji:'📱',price:999,was:1199,drop:17,badge:'HOT',cat:'electronics'},
+  {id:2,name:'Nike Air Max 270',store:'Nike.com',emoji:'👟',price:89,was:150,drop:41,badge:'SALE',cat:'fashion'},
+  {id:3,name:'Samsung 65" QLED TV',store:'BestBuy',emoji:'📺',price:799,was:1299,drop:38,badge:'HOT',cat:'electronics'},
+  {id:4,name:'Dyson V15 Vacuum',store:'Dyson',emoji:'🌀',price:449,was:699,drop:36,badge:'DEAL',cat:'home'},
+  {id:5,name:'PS5 + Extra Controller',store:'GameStop',emoji:'🎮',price:499,was:599,drop:17,badge:'NEW',cat:'gaming'},
+  {id:6,name:'AirPods Pro 2nd Gen',store:'Apple',emoji:'🎧',price:189,was:249,drop:24,badge:'SALE',cat:'electronics'},
+  {id:7,name:"Levi's 501 Jeans",store:'Levis.com',emoji:'👖',price:49,was:89,drop:45,badge:'HOT',cat:'fashion'},
+  {id:8,name:'KitchenAid Stand Mixer',store:'Williams-Sonoma',emoji:'🍰',price:279,was:449,drop:38,badge:'DEAL',cat:'home'},
+];
+
+const STORES = [
+  {name:'Amazon',emoji:'📦',products:'350M+',shipping:'Free Prime'},
+  {name:'eBay',emoji:'🏷️',products:'1.5B+',shipping:'Varies'},
+  {name:'Walmart',emoji:'🛒',products:'75M+',shipping:'Free $35+'},
+  {name:'AliExpress',emoji:'🌏',products:'100M+',shipping:'Free+'},
+  {name:'Etsy',emoji:'🎨',products:'60M+',shipping:'Varies'},
+  {name:'Newegg',emoji:'💻',products:'3M+',shipping:'Free+'},
+];
+
+const WATCHLIST = [
+  {name:'MacBook Air M3',emoji:'💻',target:999,current:1099,alert:false},
+  {name:'Sony WH-1000XM5',emoji:'🎧',target:249,current:278,alert:true},
+  {name:'iPad Pro 11"',emoji:'📟',target:699,current:799,alert:false},
+];
+
+// === PWA ===
+let deferredPrompt = null;
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
+}
+window.addEventListener('beforeinstallprompt', e=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('install-wrap').style.display='block';
+});
+function installPWA(){
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(()=>{
+      deferredPrompt=null;
+      document.getElementById('install-wrap').style.display='none';
+    });
+  } else {
+    showToast('On iOS: Safari → Share → Add to Home Screen');
+  }
+}
+
+// === NAV ===
+const pages = ['home','search','product','watch','premium','profile'];
+function navTo(page, el) {
+  pages.forEach(p => {
+    const el2 = document.getElementById('page-'+p);
+    if(el2) el2.classList.remove('active');
+  });
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const pg = document.getElementById('page-'+page);
+  if(pg) pg.classList.add('active');
+  const nb = document.getElementById('nav-'+page);
+  if(nb) nb.classList.add('active');
+  else if(el) el.classList.add('active');
+  document.getElementById('content').scrollTop = 0;
+  if(page==='watch') renderWatchlist();
+  if(page==='profile') renderProfile();
+}
+
+// === RENDER HOME ===
+function renderHome(){
+  const hotDeals = document.getElementById('hot-deals');
+  hotDeals.innerHTML = DEALS.slice(0,6).map(d=>`
+    <div class="deal-card" onclick="showProduct(${d.id})">
+      <div class="deal-img">${d.emoji}</div>
+      <div class="deal-badge ${d.badge==='HOT'?'hot':d.badge==='NEW'?'new':''}">${d.badge}</div>
+      <div class="deal-name">${d.name}</div>
+      <div class="deal-store">${d.store}</div>
+      <div class="deal-prices">
+        <div class="deal-price-now">$${d.price}</div>
+        <div class="deal-price-was">$${d.was}</div>
+      </div>
+      <div class="deal-save">Save ${d.drop}%</div>
+    </div>`).join('');
+
+  const drops = document.getElementById('price-drops');
+  drops.innerHTML = DEALS.slice(0,4).sort((a,b)=>b.drop-a.drop).map(d=>`
+    <div class="product-card" onclick="showProduct(${d.id})">
+      <div class="product-img">${d.emoji}</div>
+      <div class="product-info">
+        <div class="product-name">${d.name}</div>
+        <div class="product-meta">Best price at ${d.store}</div>
+        <div class="product-bottom">
+          <div class="product-price">$${d.price}</div>
+          <div class="product-drop">↓ ${d.drop}% drop</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// === SEARCH ===
+let searchCount = parseInt(localStorage.getItem('searches')||'0');
+const FREE_LIMIT = 3;
+
+function doSearch(q){
+  if(!q.trim()){showToast('Enter a product name');return;}
+  if(searchCount >= FREE_LIMIT && !isPremium()){
+    navTo('premium');
+    showToast('⭐ Upgrade to search more');
+    return;
+  }
+  searchCount++;
+  localStorage.setItem('searches', searchCount);
+  navTo('search');
+  document.getElementById('hero-search').value = q;
+  document.getElementById('top-search').value = q;
+  showSearchResults(q);
+}
+
+function showSearchResults(q){
+  const wrap = document.getElementById('search-results-wrap');
+  const empty = document.getElementById('search-empty');
+  wrap.style.display='block';
+  empty.style.display='none';
+
+  const results = document.getElementById('search-results');
+  results.innerHTML = '<div class="loading"><div class="spin"></div>Searching 12,000+ stores...</div>';
+
+  setTimeout(()=>{
+    const filtered = DEALS.filter(d =>
+      d.name.toLowerCase().includes(q.toLowerCase()) ||
+      q.toLowerCase().includes(d.cat)
+    );
+    const shown = filtered.length > 0 ? filtered : DEALS;
+    results.innerHTML = shown.map(d=>`
+      <div class="product-card" onclick="showProduct(${d.id})">
+        <div class="product-img">${d.emoji}</div>
+        <div class="product-info">
+          <div class="product-name">${d.name}</div>
+          <div class="product-meta">Found in ${Math.floor(Math.random()*8)+3} stores · ${d.store} is cheapest</div>
+          <div class="product-bottom">
+            <div class="product-price">$${d.price}</div>
+            <div class="product-drop">↓ ${d.drop}% off RRP</div>
+          </div>
+        </div>
+      </div>`).join('');
+  }, 900);
+}
+
+function sortBy(type){
+  document.querySelectorAll('.filter').forEach(f=>f.classList.remove('active'));
+  event.target.classList.add('active');
+  showToast('Sorting by '+type);
+}
+
+function renderFeaturedStores(){
+  const el = document.getElementById('featured-stores');
+  el.innerHTML = STORES.map(s=>`
+    <div class="product-card">
+      <div class="product-img">${s.emoji}</div>
+      <div class="product-info">
+        <div class="product-name">${s.name}</div>
+        <div class="product-meta">${s.products} products · ${s.shipping}</div>
+        <div class="product-bottom">
+          <div class="product-stores">Global store</div>
+          <div class="product-drop">🌍 Available</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// === PRODUCT DETAIL ===
+function showProduct(id){
+  const d = DEALS.find(x=>x.id===id);
+  if(!d) return;
+  navTo('product');
+
+  const stores = [
+    {name:d.store,emoji:'🏪',price:d.price,shipping:'Free',rating:4.8,best:true},
+    {name:'eBay',emoji:'🏷️',price:d.price+Math.floor(Math.random()*30)+5,shipping:'$4.99',rating:4.5,best:false},
+    {name:'Walmart',emoji:'🛒',price:d.price+Math.floor(Math.random()*20)+10,shipping:'Free $35+',rating:4.6,best:false},
+    {name:'AliExpress',emoji:'🌏',price:d.price-Math.floor(Math.random()*30)+5,shipping:'Free (slow)',rating:4.2,best:false},
+  ].sort((a,b)=>a.price-b.price);
+  stores[0].best=true;
+
+  document.getElementById('product-detail').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;padding:0 0 14px;margin-bottom:14px;border-bottom:1px solid var(--border)">
+      <button onclick="navTo('search')" style="background:var(--s2);border:1px solid var(--border);border-radius:var(--r-sm);padding:6px 12px;color:var(--text);cursor:pointer;font-size:13px">← Back</button>
+      <span style="font-size:13px;font-weight:500;flex:1">${d.name}</span>
+      <span onclick="addToWatch(${d.id})" style="cursor:pointer;font-size:20px">🔔</span>
+    </div>
+    <div class="price-comp">
+      <div class="price-comp-header">
+        <div class="price-comp-img">${d.emoji}</div>
+        <div class="price-comp-info">
+          <h3>${d.name}</h3>
+          <p>Best price: <strong style="color:var(--green)">$${stores[0].price}</strong> · Save up to $${d.was-stores[0].price}</p>
+        </div>
+      </div>
+      ${stores.map(s=>`
+        <div class="store-row">
+          <div class="store-logo">${s.emoji}</div>
+          <div style="flex:1">
+            <div class="store-name">${s.name} ${s.best?'<span class="best-tag">BEST</span>':''}</div>
+            <div class="store-info">Shipping: ${s.shipping} · ⭐ ${s.rating}</div>
+          </div>
+          <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+            <div class="store-price ${s.best?'best':''}">$${s.price}</div>
+            <button class="store-btn ${s.best?'best':''}" onclick="goToStore('${s.name}')">Buy →</button>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div class="card" style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:16px">
+      <div style="font-weight:600;font-size:13px;margin-bottom:10px">📊 Price History</div>
+      <div style="display:flex;align-items:flex-end;gap:4px;height:60px">
+        ${[120,115,130,125,d.was,d.was-10,d.price+30,d.price+20,d.price].map((v,i)=>`
+          <div style="flex:1;background:${i===8?'var(--acc)':'var(--s3)'};border-radius:3px 3px 0 0;height:${Math.round(v/d.was*60)}px"></div>
+        `).join('')}
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:4px">
+        <span>3mo ago</span><span>Now</span>
+      </div>
+    </div>`;
+}
+
+function goToStore(name){
+  showToast('Opening '+name+'...');
+  setTimeout(()=>showToast('⭐ Premium needed for direct links'),1200);
+}
+
+function addToWatch(id){
+  showToast('🔔 Price alert set! Get notified on drop.');
+}
+
+// === WATCHLIST ===
+function renderWatchlist(){
+  const el = document.getElementById('watchlist-items');
+  if(!WATCHLIST.length){
+    el.innerHTML='<p style="color:var(--text2);text-align:center;padding:24px">No alerts set yet</p>';
+    return;
+  }
+  el.innerHTML = WATCHLIST.map(w=>`
+    <div class="watchlist-item">
+      <div class="watch-img">${w.emoji}</div>
+      <div class="watch-info">
+        <div class="watch-name">${w.name}</div>
+        <div class="watch-target">Alert when below $${w.target}</div>
+      </div>
+      <div class="watch-current ${w.current<=w.target?'hit':w.current<=w.target*1.1?'close':''}">${w.current<=w.target?'🎉':''} $${w.current}</div>
+      <span class="watch-bell">${w.alert?'🔔':'🔕'}</span>
+    </div>`).join('');
+}
+
+// === PREMIUM ===
+let selectedPlan = 'yearly';
+function selectPlan(p){
+  selectedPlan = p;
+  document.querySelectorAll('.plan').forEach(el=>el.classList.remove('popular'));
+  event.target.closest('.plan').classList.add('popular');
+  document.getElementById('sub-btn').textContent = p==='yearly' ? '🚀 Start Free 7-Day Trial — $2.99/mo' : '🚀 Start Free 7-Day Trial — $4.99/mo';
+}
+function isPremium(){return localStorage.getItem('premium')==='true';}
+function subscribe(){
+  showToast('🔄 Connecting to payment...');
+  setTimeout(()=>{
+    localStorage.setItem('premium','true');
+    showToast('🎉 Premium activated! Enjoy unlimited access.');
+    document.getElementById('profile-plan').textContent='⭐ Premium Member';
+  },1500);
+}
+
+// === PROFILE ===
+function renderProfile(){
+  document.getElementById('profile-plan').textContent = isPremium()
+    ? '⭐ Premium Member · Unlimited searches'
+    : `Free Plan · ${Math.max(0, FREE_LIMIT-searchCount)} searches left today`;
+}
+
+// === PUSH ===
+async function enablePush(){
+  if(!('Notification' in window)){showToast('Notifications not supported');return;}
+  const p = await Notification.requestPermission();
+  if(p==='granted'){
+    document.getElementById('notif-status').textContent='✅';
+    showToast('🔔 Price alerts enabled!');
+    new Notification('PriceHunt 🔍',{body:'You will be notified of price drops!'});
+  }
+}
+
+// === CATEGORY FILTER ===
+function filterCat(el, cat){
+  document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const hotDeals = document.getElementById('hot-deals');
+  const filtered = cat==='all' ? DEALS : DEALS.filter(d=>d.cat===cat);
+  const shown = filtered.length>0 ? filtered : DEALS;
+  hotDeals.innerHTML = shown.slice(0,6).map(d=>`
+    <div class="deal-card" onclick="showProduct(${d.id})">
+      <div class="deal-img">${d.emoji}</div>
+      <div class="deal-badge ${d.badge==='HOT'?'hot':d.badge==='NEW'?'new':''}">${d.badge}</div>
+      <div class="deal-name">${d.name}</div>
+      <div class="deal-store">${d.store}</div>
+      <div class="deal-prices">
+        <div class="deal-price-now">$${d.price}</div>
+        <div class="deal-price-was">$${d.was}</div>
+      </div>
+      <div class="deal-save">Save ${d.drop}%</div>
+    </div>`).join('');
+}
+
+// === TOAST ===
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+// === INIT ===
+window.onload=()=>{
+  renderHome();
+  renderFeaturedStores();
+  renderWatchlist();
+};
+</script>
+</body>
+</html>
