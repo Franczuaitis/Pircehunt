@@ -554,7 +554,7 @@ function showProduct(id){
           </div>
           <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
             <div class="store-price ${s.best?'best':''}">$${s.price}</div>
-            <button class="store-btn ${s.best?'best':''}" onclick="goToStore('${s.name}')">Buy →</button>
+            <button class="store-btn ${s.best?'best':''}onclick="goToStore('${s.name}','${d.name}')">Buy →</button>
           </div>
         </div>`).join('')}
     </div>
