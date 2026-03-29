@@ -571,9 +571,20 @@ function showProduct(id){
     </div>`;
 }
 
-function goToStore(name){
-  showToast('Opening '+name+'...');
-  setTimeout(()=>showToast('⭐ Premium needed for direct links'),1200);
+function goToStore(name, productName){
+  const urls = {
+    'Amazon': 'https://www.amazon.com/s?k='+encodeURIComponent(productName),
+    'eBay': 'https://www.ebay.com/sch/i.html?_nkw='+encodeURIComponent(productName),
+    'Walmart': 'https://www.walmart.com/search?q='+encodeURIComponent(productName),
+    'AliExpress': 'https://www.aliexpress.com/wholesale?SearchText='+encodeURIComponent(productName),
+    'GameStop': 'https://www.gamestop.com/search#q='+encodeURIComponent(productName),
+    'Nike.com': 'https://www.nike.com/w?q='+encodeURIComponent(productName),
+    'Apple': 'https://www.apple.com/search/'+encodeURIComponent(productName),
+    'BestBuy': 'https://www.bestbuy.com/site/searchpage.jsp?st='+encodeURIComponent(productName),
+  };
+  const url = urls[name] || 'https://www.google.com/search?q='+encodeURIComponent(productName+' '+name+' buy');
+  window.open(url, '_blank');
+}
 }
 
 function addToWatch(id){
