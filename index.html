@@ -572,16 +572,21 @@ function showProduct(id){
 }
 
 function goToStore(name, productName){
+  const tag = 'pricehunt20-20';
+  const q = encodeURIComponent(productName);
   const urls = {
-    'Amazon': 'https://www.amazon.com/s?k='+encodeURIComponent(productName),
-    'eBay': 'https://www.ebay.com/sch/i.html?_nkw='+encodeURIComponent(productName),
-    'Walmart': 'https://www.walmart.com/search?q='+encodeURIComponent(productName),
-    'AliExpress': 'https://www.aliexpress.com/wholesale?SearchText='+encodeURIComponent(productName),
-    'GameStop': 'https://www.gamestop.com/search#q='+encodeURIComponent(productName),
-    'Nike.com': 'https://www.nike.com/w?q='+encodeURIComponent(productName),
-    'Apple': 'https://www.apple.com/search/'+encodeURIComponent(productName),
-    'BestBuy': 'https://www.bestbuy.com/site/searchpage.jsp?st='+encodeURIComponent(productName),
+    'Amazon':   `https://www.amazon.com/s?k=${q}&tag=${tag}`,
+    'eBay':     `https://www.ebay.com/sch/i.html?_nkw=${q}`,
+    'Walmart':  `https://www.walmart.com/search?q=${q}`,
+    'AliExpress': `https://www.aliexpress.com/wholesale?SearchText=${q}`,
+    'GameStop': `https://www.gamestop.com/search#q=${q}`,
+    'Nike.com': `https://www.nike.com/w?q=${q}`,
+    'Apple':    `https://www.apple.com/search/${q}`,
+    'BestBuy':  `https://www.bestbuy.com/site/searchpage.jsp?st=${q}`,
   };
+  const url = urls[name] || `https://www.amazon.com/s?k=${q}&tag=${tag}`;
+  window.open(url, '_blank');
+}
   const url = urls[name] || 'https://www.google.com/search?q='+encodeURIComponent(productName+' '+name+' buy');
   window.open(url, '_blank');
 }
