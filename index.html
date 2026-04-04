@@ -346,6 +346,7 @@ function installPWA(){
 
 const PAGES=['home','search','product','watch','premium','profile'];
 function navTo(page,el){
+  lastPage = currentPage || 'home';
   PAGES.forEach(p=>{ const e=document.getElementById('page-'+p); if(e) e.classList.remove('active'); });
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   const pg=document.getElementById('page-'+page); if(pg) pg.classList.add('active');
@@ -435,7 +436,7 @@ function showProduct(id){
   stores[0].best=true;
   document.getElementById('product-detail').innerHTML=`
     <div class="br">
-      <button class="bb" onclick="navTo('search')">← Back</button>
+      <button class="bb" onclick="navTo(lastPage)">← Back</button>
       <div class="bt">${d.name}</div>
       <span onclick="addToWatch(${d.id})" style="cursor:pointer;font-size:20px;flex-shrink:0">🔔</span>
     </div>
