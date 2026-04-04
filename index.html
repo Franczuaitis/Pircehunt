@@ -303,65 +303,58 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 <script>
 const TAG = 'pricehunt20-20';
 
-// === 50 PRODUCTS ===
+// Nazwy produktow bez apostrofow i cudzyslowow - bezpieczne dla onclick
 const DEALS = [
-  // Electronics
   {id:1,name:'iPhone 16 Pro 256GB',store:'Amazon',emoji:'📱',price:999,was:1199,drop:17,badge:'hot',cat:'electronics'},
   {id:2,name:'Samsung Galaxy S24 Ultra',store:'Samsung',emoji:'📱',price:899,was:1199,drop:25,badge:'sale',cat:'electronics'},
-  {id:3,name:'Samsung 65" QLED TV',store:'Best Buy',emoji:'📺',price:799,was:1299,drop:38,badge:'hot',cat:'electronics'},
-  {id:4,name:'LG OLED 55" C3',store:'Amazon',emoji:'📺',price:999,was:1499,drop:33,badge:'',cat:'electronics'},
+  {id:3,name:'Samsung 65in QLED TV',store:'Best Buy',emoji:'📺',price:799,was:1299,drop:38,badge:'hot',cat:'electronics'},
+  {id:4,name:'LG OLED 55in C3',store:'Amazon',emoji:'📺',price:999,was:1499,drop:33,badge:'',cat:'electronics'},
   {id:5,name:'AirPods Pro 2nd Gen',store:'Apple',emoji:'🎧',price:189,was:249,drop:24,badge:'sale',cat:'electronics'},
-  {id:6,name:'Sony WH-1000XM5',store:'Sony',emoji:'🎧',price:249,was:399,drop:38,badge:'',cat:'electronics'},
-  {id:7,name:'MacBook Air M3 13"',store:'Apple',emoji:'💻',price:1099,was:1299,drop:15,badge:'',cat:'electronics'},
+  {id:6,name:'Sony WH-1000XM5 Headphones',store:'Sony',emoji:'🎧',price:249,was:399,drop:38,badge:'',cat:'electronics'},
+  {id:7,name:'MacBook Air M3 13in',store:'Apple',emoji:'💻',price:1099,was:1299,drop:15,badge:'',cat:'electronics'},
   {id:8,name:'Dell XPS 15 OLED',store:'Dell',emoji:'💻',price:1299,was:1799,drop:28,badge:'sale',cat:'electronics'},
-  {id:9,name:'iPad Pro 12.9" M4',store:'Apple',emoji:'📱',price:999,was:1199,drop:17,badge:'new',cat:'electronics'},
-  {id:10,name:'Kindle Paperwhite',store:'Amazon',emoji:'📖',price:99,was:139,drop:29,badge:'sale',cat:'electronics'},
+  {id:9,name:'iPad Pro 12.9in M4',store:'Apple',emoji:'📱',price:999,was:1199,drop:17,badge:'new',cat:'electronics'},
+  {id:10,name:'Kindle Paperwhite 16GB',store:'Amazon',emoji:'📖',price:99,was:139,drop:29,badge:'sale',cat:'electronics'},
   {id:11,name:'GoPro Hero 13 Black',store:'Amazon',emoji:'📷',price:299,was:399,drop:25,badge:'',cat:'electronics'},
   {id:12,name:'DJI Mini 4 Pro Drone',store:'DJI',emoji:'🚁',price:759,was:959,drop:21,badge:'',cat:'electronics'},
-  // Fashion
   {id:13,name:'Nike Air Max 270',store:'Nike',emoji:'👟',price:89,was:150,drop:41,badge:'sale',cat:'fashion'},
   {id:14,name:'Adidas Ultraboost 24',store:'Adidas',emoji:'👟',price:119,was:180,drop:34,badge:'',cat:'fashion'},
-  {id:15,name:'Levi 501 Original Jeans',store:'Amazon',emoji:'👖',price:49,was:89,drop:45,badge:'hot',cat:'fashion'},
+  {id:15,name:'Levis 501 Original Jeans',store:'Amazon',emoji:'👖',price:49,was:89,drop:45,badge:'hot',cat:'fashion'},
   {id:16,name:'North Face Puffer Jacket',store:'Amazon',emoji:'🧥',price:149,was:250,drop:40,badge:'hot',cat:'fashion'},
   {id:17,name:'Ray-Ban Wayfarer Sunglasses',store:'Amazon',emoji:'🕶️',price:99,was:163,drop:39,badge:'',cat:'fashion'},
-  {id:18,name:'Timberland 6" Boot',store:'Amazon',emoji:'🥾',price:119,was:190,drop:37,badge:'',cat:'fashion'},
-  {id:19,name:'Calvin Klein T-Shirt Pack',store:'Amazon',emoji:'👕',price:35,was:55,drop:36,badge:'sale',cat:'fashion'},
+  {id:18,name:'Timberland 6in Premium Boot',store:'Amazon',emoji:'🥾',price:119,was:190,drop:37,badge:'',cat:'fashion'},
+  {id:19,name:'Calvin Klein T-Shirt 3-Pack',store:'Amazon',emoji:'👕',price:35,was:55,drop:36,badge:'sale',cat:'fashion'},
   {id:20,name:'Converse Chuck Taylor All Star',store:'Amazon',emoji:'👟',price:45,was:70,drop:36,badge:'',cat:'fashion'},
-  // Home
   {id:21,name:'Dyson V15 Detect Vacuum',store:'Dyson',emoji:'🌀',price:449,was:699,drop:36,badge:'',cat:'home'},
-  {id:22,name:'KitchenAid Stand Mixer',store:'Amazon',emoji:'🍰',price:279,was:449,drop:38,badge:'',cat:'home'},
+  {id:22,name:'KitchenAid Stand Mixer 5qt',store:'Amazon',emoji:'🍰',price:279,was:449,drop:38,badge:'',cat:'home'},
   {id:23,name:'Instant Pot Duo 7-in-1',store:'Amazon',emoji:'🍲',price:79,was:129,drop:39,badge:'sale',cat:'home'},
   {id:24,name:'Nespresso Vertuo Next',store:'Amazon',emoji:'☕',price:99,was:179,drop:45,badge:'hot',cat:'home'},
-  {id:25,name:'Roomba i7+ Robot Vacuum',store:'Amazon',emoji:'🤖',price:399,was:599,drop:33,badge:'',cat:'home'},
+  {id:25,name:'Roomba i7 Plus Robot Vacuum',store:'Amazon',emoji:'🤖',price:399,was:599,drop:33,badge:'',cat:'home'},
   {id:26,name:'Philips Hue Starter Kit',store:'Amazon',emoji:'💡',price:99,was:149,drop:34,badge:'',cat:'home'},
   {id:27,name:'Ninja Air Fryer XL',store:'Amazon',emoji:'🍗',price:89,was:139,drop:36,badge:'sale',cat:'home'},
   {id:28,name:'Weber Spirit II Gas Grill',store:'Amazon',emoji:'🔥',price:499,was:699,drop:29,badge:'',cat:'home'},
-  // Sports
-  {id:29,name:'Peloton Bike+',store:'Peloton',emoji:'🚴',price:1999,was:2495,drop:20,badge:'',cat:'sports'},
+  {id:29,name:'Peloton Bike Plus',store:'Peloton',emoji:'🚴',price:1999,was:2495,drop:20,badge:'',cat:'sports'},
   {id:30,name:'Garmin Forerunner 265',store:'Amazon',emoji:'⌚',price:299,was:449,drop:33,badge:'sale',cat:'sports'},
   {id:31,name:'Theragun Prime Massager',store:'Amazon',emoji:'💪',price:199,was:299,drop:33,badge:'',cat:'sports'},
   {id:32,name:'Wilson Tennis Racket Pro',store:'Amazon',emoji:'🎾',price:89,was:139,drop:36,badge:'',cat:'sports'},
   {id:33,name:'Hydro Flask 32oz Bottle',store:'Amazon',emoji:'🧴',price:35,was:50,drop:30,badge:'',cat:'sports'},
   {id:34,name:'Fitbit Charge 6',store:'Amazon',emoji:'⌚',price:99,was:159,drop:38,badge:'sale',cat:'sports'},
-  // Beauty
   {id:35,name:'Dyson Airwrap Complete',store:'Dyson',emoji:'💇',price:499,was:599,drop:17,badge:'',cat:'beauty'},
   {id:36,name:'La Mer Moisturizing Cream',store:'Amazon',emoji:'🧴',price:189,was:280,drop:33,badge:'',cat:'beauty'},
   {id:37,name:'Foreo Luna 4 Face Cleaner',store:'Amazon',emoji:'✨',price:99,was:179,drop:45,badge:'hot',cat:'beauty'},
   {id:38,name:'Oral-B iO Series 9',store:'Amazon',emoji:'🦷',price:149,was:249,drop:40,badge:'sale',cat:'beauty'},
   {id:39,name:'Charlotte Tilbury Palette',store:'Amazon',emoji:'💄',price:55,was:75,drop:27,badge:'',cat:'beauty'},
   {id:40,name:'Tatcha Dewy Skin Cream',store:'Amazon',emoji:'🌸',price:68,was:89,drop:24,badge:'',cat:'beauty'},
-  // Gaming
   {id:41,name:'PS5 Slim Console',store:'Amazon',emoji:'🎮',price:449,was:499,drop:10,badge:'',cat:'gaming'},
   {id:42,name:'Xbox Series X',store:'Amazon',emoji:'🎮',price:399,was:499,drop:20,badge:'sale',cat:'gaming'},
   {id:43,name:'Nintendo Switch OLED',store:'Amazon',emoji:'🕹️',price:299,was:349,drop:14,badge:'',cat:'gaming'},
   {id:44,name:'SteelSeries Arctis Nova Pro',store:'Amazon',emoji:'🎧',price:199,was:349,drop:43,badge:'hot',cat:'gaming'},
   {id:45,name:'Logitech G Pro X Superlight',store:'Amazon',emoji:'🖱️',price:99,was:159,drop:38,badge:'sale',cat:'gaming'},
   {id:46,name:'Corsair K100 RGB Keyboard',store:'Amazon',emoji:'⌨️',price:149,was:229,drop:35,badge:'',cat:'gaming'},
-  // Books
-  {id:47,name:'Atomic Habits - James Clear',store:'Amazon',emoji:'📚',price:14,was:27,drop:48,badge:'hot',cat:'books'},
+  {id:47,name:'Atomic Habits by James Clear',store:'Amazon',emoji:'📚',price:14,was:27,drop:48,badge:'hot',cat:'books'},
   {id:48,name:'The Psychology of Money',store:'Amazon',emoji:'📚',price:12,was:20,drop:40,badge:'',cat:'books'},
-  {id:49,name:'Fourth Wing - Rebecca Yarros',store:'Amazon',emoji:'📖',price:16,was:29,drop:45,badge:'sale',cat:'books'},
-  {id:50,name:'Spare - Prince Harry',store:'Amazon',emoji:'📖',price:15,was:36,drop:58,badge:'hot',cat:'books'},
+  {id:49,name:'Fourth Wing by Rebecca Yarros',store:'Amazon',emoji:'📖',price:16,was:29,drop:45,badge:'sale',cat:'books'},
+  {id:50,name:'Spare by Prince Harry',store:'Amazon',emoji:'📖',price:15,was:36,drop:58,badge:'hot',cat:'books'},
 ];
 
 const STORES = [
@@ -376,10 +369,9 @@ const STORES = [
 const WATCHLIST = [
   {name:'MacBook Air M3',emoji:'💻',target:999,current:1099,alert:false},
   {name:'Sony WH-1000XM5',emoji:'🎧',target:249,current:278,alert:true},
-  {name:'iPad Pro 12.9"',emoji:'📱',target:699,current:999,alert:false},
+  {name:'iPad Pro 12.9in',emoji:'📱',target:699,current:999,alert:false},
 ];
 
-// === NAVIGATION WITH BACK SUPPORT ===
 let currentPage = 'home';
 let prevPage = 'home';
 
@@ -406,12 +398,8 @@ function navTo(page, el){
   if(page==='watch') renderWatchlist();
   if(page==='profile') renderProfile();
 }
+function goBack(){ navTo(prevPage); }
 
-function goBack(){
-  navTo(prevPage);
-}
-
-// === RENDER HOME ===
 function renderHome(list){
   const d=list||DEALS;
   document.getElementById('hot-deals').innerHTML=d.filter(x=>x.badge==='hot'||x.badge==='sale').slice(0,8).map(x=>`
@@ -420,7 +408,7 @@ function renderHome(list){
       ${x.badge?`<div class="db ${x.badge}">${x.badge}</div>`:''}
       <div class="dn">${x.name}</div>
       <div class="ds">${x.store}</div>
-      <div class="dp"><div class="dpn">$${x.price}</div><div class="dpw">$${x.was}</div><div class="dps">−${x.drop}%</div></div>
+      <div class="dp"><div class="dpn">$${x.price}</div><div class="dpw">$${x.was}</div><div class="dps">-${x.drop}%</div></div>
     </div>`).join('');
   document.getElementById('price-drops').innerHTML=d.slice().sort((a,b)=>b.drop-a.drop).slice(0,6).map(x=>`
     <div class="pc" onclick="showProduct(${x.id})">
@@ -428,12 +416,11 @@ function renderHome(list){
       <div class="pi">
         <div class="pn">${x.name}</div>
         <div class="pm">Best price at ${x.store}</div>
-        <div class="pb"><div class="pp">$${x.price}</div><div class="pd">↓ ${x.drop}% drop</div></div>
+        <div class="pb"><div class="pp">$${x.price}</div><div class="pd">down ${x.drop}%</div></div>
       </div>
     </div>`).join('');
 }
 
-// === SEARCH ===
 let searchCount=parseInt(localStorage.getItem('searches')||'0');
 const FREE_LIMIT=3;
 function doSearch(q){
@@ -458,8 +445,8 @@ function showSearchResults(q){
         <div class="pe">${d.emoji}</div>
         <div class="pi">
           <div class="pn">${d.name}</div>
-          <div class="pm">Found in ${Math.floor(Math.random()*8)+3} stores · ${d.store} cheapest</div>
-          <div class="pb"><div class="pp">$${d.price}</div><div class="pd">↓ ${d.drop}% off</div></div>
+          <div class="pm">Found in ${Math.floor(Math.random()*8)+3} stores</div>
+          <div class="pb"><div class="pp">$${d.price}</div><div class="pd">-${d.drop}% off</div></div>
         </div>
       </div>`).join('');
   },800);
@@ -481,41 +468,36 @@ function renderFeaturedStores(){
     </div>`).join('');
 }
 
-// === PRODUCT DETAIL ===
 function showProduct(id){
   const d=DEALS.find(x=>x.id===id); if(!d) return;
   navTo('product');
   const stores=[
-    {name:'Amazon',emoji:'📦',price:d.price+Math.floor(Math.random()*15)+2,shipping:'Free Prime',rating:4.7,best:false},
+    {name:'Amazon',emoji:'📦',price:d.price,shipping:'Free Prime',rating:4.7,best:true},
     {name:'eBay',emoji:'🏷️',price:d.price+Math.floor(Math.random()*30)+10,shipping:'$4.99',rating:4.4,best:false},
     {name:'Walmart',emoji:'🛒',price:d.price+Math.floor(Math.random()*20)+5,shipping:'Free $35+',rating:4.5,best:false},
     {name:'Best Buy',emoji:'🔷',price:d.price+Math.floor(Math.random()*25)+8,shipping:'Free',rating:4.6,best:false},
-  ].sort((a,b)=>a.price-b.price);
-  stores[0].best=true;
-  // Always make cheapest Amazon with affiliate tag
-  if(stores[0].name!=='Amazon') { const am=stores.find(s=>s.name==='Amazon'); if(am){stores.splice(stores.indexOf(am),1);stores.unshift(am);stores[0].best=true;stores[1].best=false;} }
-
+  ];
   document.getElementById('product-detail').innerHTML=`
     <div class="br">
-      <button class="bb" onclick="goBack()">← Back</button>
+      <button class="bb" onclick="goBack()">Back</button>
       <div class="bt">${d.name}</div>
       <span onclick="addToWatch(${d.id})" style="cursor:pointer;font-size:20px;flex-shrink:0">🔔</span>
     </div>
     <div class="cc">
       <div class="ch">
         <div class="cem">${d.emoji}</div>
-        <div class="ci"><h3>${d.name}</h3><p>Best: <strong style="color:var(--green)">$${stores[0].price}</strong> · Save up to $${d.was-stores[0].price}</p></div>
+        <div class="ci"><h3>${d.name}</h3><p>Best: <strong style="color:var(--green)">$${stores[0].price}</strong> on Amazon with free shipping</p></div>
       </div>
       ${stores.map(s=>`
         <div class="sr">
           <div class="sem">${s.emoji}</div>
           <div class="snw">
             <div class="sn">${s.name} ${s.best?'<span class="bp">best</span>':''}</div>
-            <div class="ss">Shipping: ${s.shipping} · ⭐ ${s.rating}</div>
+            <div class="ss">Shipping: ${s.shipping} · ${s.rating} stars</div>
           </div>
           <div class="srr">
             <div class="spr ${s.best?'best':''}">$${s.price}</div>
-            <button class="${s.best?'bybtn':'bybtn sec'}" onclick="goToStore('${s.name}','${d.name}')">Buy →</button>
+            <button class="${s.best?'bybtn':'bybtn sec'}" onclick="goToStore('${s.name}','${d.name}')">Buy</button>
           </div>
         </div>`).join('')}
     </div>
@@ -525,7 +507,7 @@ function showProduct(id){
         ${[120,115,130,125,d.was,d.was-10,d.price+30,d.price+20,d.price].map((v,i)=>`
           <div class="bar" style="height:${Math.round(v/d.was*56)}px;background:${i===8?'var(--t)':'var(--s2)'}"></div>`).join('')}
       </div>
-      <div class="blab"><span>3mo ago</span><span>Now</span></div>
+      <div class="blab"><span>3 months ago</span><span>Today</span></div>
     </div>`;
 }
 
@@ -536,21 +518,14 @@ function goToStore(name, productName){
     'eBay':`https://www.ebay.com/sch/i.html?_nkw=${q}`,
     'Walmart':`https://www.walmart.com/search?q=${q}`,
     'Best Buy':`https://www.bestbuy.com/site/searchpage.jsp?st=${q}`,
-    'AliExpress':`https://www.aliexpress.com/wholesale?SearchText=${q}`,
-    'GameStop':`https://www.gamestop.com/search#q=${q}`,
-    'Nike':`https://www.nike.com/w?q=${q}`,
-    'Apple':`https://www.apple.com/search/${q}`,
-    'Adidas':`https://www.adidas.com/us/search?q=${q}`,
   };
   window.open(urls[name]||`https://www.amazon.com/s?k=${q}&tag=${TAG}`,'_blank');
 }
 
 function addToWatch(id){showToast('Upgrade to Premium to set price alerts');}
 
-// === WATCHLIST ===
 function renderWatchlist(){
   const el=document.getElementById('watchlist-items');
-  if(!WATCHLIST.length){el.innerHTML='<p style="color:var(--t2);text-align:center;padding:32px 0">No alerts set yet</p>';return;}
   el.innerHTML=WATCHLIST.map(w=>`
     <div class="wi">
       <div class="we">${w.emoji}</div>
@@ -559,13 +534,12 @@ function renderWatchlist(){
     </div>`).join('');
 }
 
-// === PREMIUM ===
 let selectedPlan='yearly';
 function selectPlan(p,el){
   selectedPlan=p;
   document.querySelectorAll('.plan').forEach(e=>e.classList.remove('pop'));
   el.classList.add('pop');
-  document.getElementById('sub-btn').textContent=p==='yearly'?'Start free 7-day trial — $2.99/mo':'Start free 7-day trial — $4.99/mo';
+  document.getElementById('sub-btn').textContent=p==='yearly'?'Start free trial — $2.99/mo':'Start free trial — $4.99/mo';
 }
 function isPremium(){return localStorage.getItem('premium')==='true';}
 function subscribe(){
