@@ -76,7 +76,7 @@ function getLink(item) {
 const SCAN_QUERIES = [
   { query: 'electronics deals discount', cat: 'electronics' },
   { query: 'nike adidas shoes sale', cat: 'fashion' },
-  { query: 'home appliances deals', cat: 'home' },
+  { query: 'home kitchen gadgets sale', cat: 'home' },
   { query: 'gaming console sale', cat: 'gaming' },
   { query: 'sports equipment discount', cat: 'sports' },
   { query: 'beauty skincare sale', cat: 'beauty' },
