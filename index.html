@@ -297,7 +297,7 @@ function navTo(page, el){
   document.getElementById('content').scrollTop=0;
   if(page==='watch') renderWatchlist();
   if(page==='profile') renderProfile();
-  if(page==='home') loadDeals('all');
+  if(page==='home'){ currentCat='all'; loadDeals('all'); }
 }
 
 function goBack(){
