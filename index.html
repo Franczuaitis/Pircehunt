@@ -53,9 +53,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .dc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .2s;position:relative;box-shadow:var(--sh);}
 .dc:hover{box-shadow:var(--shm);transform:translateY(-2px);border-color:var(--b2);}
 .dc:active{transform:translateY(0);}
-.de{width:100%;height:80px;background:var(--s2);border-radius:var(--rsm);margin-bottom:12px;object-fit:contain;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.de{width:100%;height:80px;background:var(--s2);border-radius:var(--rsm);margin-bottom:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .de img{width:100%;height:100%;object-fit:contain;}
-.de-emoji{font-size:36px;}
+.de-fb{font-size:36px;}
 .dn{font-size:13px;font-weight:500;margin-bottom:3px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 .ds{font-size:11px;color:var(--t3);margin-bottom:8px;}
 .dp{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
@@ -104,6 +104,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .bybtn{background:var(--t);border:none;border-radius:var(--rsm);padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;color:white;font-family:'DM Sans',sans-serif;transition:opacity .15s;}
 .bybtn:active{opacity:0.75;}
 .bybtn.sec{background:var(--s2);color:var(--t);border:1px solid var(--b2);}
+.hc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:18px;box-shadow:var(--sh);}
+.hl{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:14px;}
+.bars{display:flex;align-items:flex-end;gap:3px;height:56px;}
+.bar{flex:1;border-radius:3px 3px 0 0;}
+.blab{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:6px;}
 .wi{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:10px;box-shadow:var(--sh);}
 .we{width:44px;height:44px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 .wii{flex:1;}
@@ -148,8 +153,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px;color:var(--t2);font-size:14px;}
 .spin{width:18px;height:18px;border:2px solid var(--b2);border-top-color:var(--t);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.empty{text-align:center;padding:40px 20px;color:var(--t2);}
-.empty p{font-size:14px;margin-top:8px;}
+.empty{text-align:center;padding:40px 20px;color:var(--t2);font-size:14px;}
 @media(max-width:360px){.dg{grid-template-columns:1fr;}.plans{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -172,14 +176,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
         <div class="stat"><div class="sv">Free</div><div class="sl">To use</div></div>
       </div>
       <div class="cats" id="cats">
-        <div class="cat active" onclick="loadDeals('best deals today',this)">🔥 Hot</div>
-        <div class="cat" onclick="loadDeals('electronics deals',this)">Electronics</div>
-        <div class="cat" onclick="loadDeals('fashion sale',this)">Fashion</div>
-        <div class="cat" onclick="loadDeals('home appliances deal',this)">Home</div>
-        <div class="cat" onclick="loadDeals('sports equipment sale',this)">Sports</div>
-        <div class="cat" onclick="loadDeals('beauty products deal',this)">Beauty</div>
-        <div class="cat" onclick="loadDeals('gaming deals',this)">Gaming</div>
-        <div class="cat" onclick="loadDeals('books deals',this)">Books</div>
+        <div class="cat active" onclick="loadDeals('all',this)">Hot</div>
+        <div class="cat" onclick="loadDeals('electronics',this)">Electronics</div>
+        <div class="cat" onclick="loadDeals('fashion',this)">Fashion</div>
+        <div class="cat" onclick="loadDeals('home',this)">Home</div>
+        <div class="cat" onclick="loadDeals('sports',this)">Sports</div>
+        <div class="cat" onclick="loadDeals('beauty',this)">Beauty</div>
+        <div class="cat" onclick="loadDeals('gaming',this)">Gaming</div>
+        <div class="cat" onclick="loadDeals('books',this)">Books</div>
       </div>
       <div class="sh"><div class="st">Hot deals</div><span class="sa" onclick="navTo('search')">See all</span></div>
       <div class="dg" id="hot-deals"><div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div></div>
@@ -208,7 +212,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
           <span onclick="doSearch('PS5')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">PS5</span>
           <span onclick="doSearch('MacBook Air')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">MacBook Air</span>
           <span onclick="doSearch('Dyson vacuum')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">Dyson vacuum</span>
-          <span onclick="doSearch('AirPods Pro')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">AirPods Pro</span>
         </div>
       </div>
     </div>
@@ -278,12 +281,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 <div class="toast" id="toast"></div>
 
 <script>
-const TAG = 'pricehunt20-20';
 let currentPage = 'home';
 let prevPage = 'home';
-let currentProductLink = null;
+let currentCat = 'all';
 
 const PAGES = ['home','search','product','watch','premium','profile'];
+
 function navTo(page, el){
   prevPage = currentPage;
   currentPage = page;
@@ -295,62 +298,81 @@ function navTo(page, el){
   if(page==='watch') renderWatchlist();
   if(page==='profile') renderProfile();
 }
-function goBack(){ navTo(prevPage); }
 
-function imgOrEmoji(url, fallback){
-  if(url) return `<img src="${url}" onerror="this.style.display='none';this.parentNode.innerHTML='<span class=de-emoji>${fallback}</span>'">`;
-  return `<span class="de-emoji">${fallback}</span>`;
+function goBack(){
+  navTo(prevPage);
+  // Jeśli wracamy do home, odśwież deale
+  if(prevPage === 'home'){
+    loadDeals(currentCat);
+  }
 }
 
-// === LOAD DEALS (real data from SerpApi) ===
-async function loadDeals(query, el){
+function imgEl(url, fallback){
+  if(url) return `<img src="${url}" onerror="this.parentNode.innerHTML='<span class=de-fb>${fallback}</span>'" style="width:100%;height:100%;object-fit:contain">`;
+  return `<span class="de-fb">${fallback}</span>`;
+}
+
+// === LOAD DEALS FROM SUPABASE ===
+async function loadDeals(cat, el){
+  currentCat = cat;
   if(el){
     document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
     el.classList.add('active');
   }
   const hotDeals = document.getElementById('hot-deals');
   const priceDrops = document.getElementById('price-drops');
-  hotDeals.innerHTML = `<div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading live deals...</div>`;
+  hotDeals.innerHTML = `<div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div>`;
   priceDrops.innerHTML = '';
 
   try {
-    const res = await fetch(`/api/deals?cat=${encodeURIComponent(query)}`);
+    const res = await fetch('/api/deals?cat=' + cat);
     const data = await res.json();
     const items = data.results || [];
 
     if(items.length === 0){
-      hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1"><p>No deals found. Try another category.</p></div>`;
+      hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1">No deals found yet. Check back soon!</div>`;
       return;
     }
 
-    hotDeals.innerHTML = items.slice(0,6).map(d=>`
-      <div class="dc" onclick="showProductByItem(${d.id})">
-        <div class="de">${imgOrEmoji(d.image,'🛍️')}</div>
+    hotDeals.innerHTML = items.slice(0,6).map((d,i)=>`
+      <div class="dc" onclick="showProductFromDeals(${i})">
+        <div class="de">${imgEl(d.image,'🛍️')}</div>
         <div class="dn">${d.name}</div>
         <div class="ds">${d.store}</div>
         <div class="dp">
-          <div class="dpn">$${d.price.toFixed(2)}</div>
+          <div class="dpn">$${parseFloat(d.price).toFixed(2)}</div>
           ${d.tag ? `<div class="dps">${d.tag}</div>` : ''}
         </div>
       </div>`).join('');
 
-    priceDrops.innerHTML = items.slice(6,12).map(d=>`
-      <div class="pc" onclick="showProductByItem(${d.id})">
-        <div class="pe">${imgOrEmoji(d.image,'🛍️')}</div>
+    priceDrops.innerHTML = items.slice(6,12).map((d,i)=>`
+      <div class="pc" onclick="showProductFromDeals(${i+6})">
+        <div class="pe">${imgEl(d.image,'🛍️')}</div>
         <div class="pi">
           <div class="pn">${d.name}</div>
           <div class="pm">${d.store}</div>
-          <div class="pb"><div class="pp">$${d.price.toFixed(2)}</div><div class="pd">${d.rating ? '⭐ '+d.rating : ''}</div></div>
+          <div class="pb">
+            <div class="pp">$${parseFloat(d.price).toFixed(2)}</div>
+            <div class="pd">${d.tag || (d.rating ? '⭐ '+d.rating : '')}</div>
+          </div>
         </div>
       </div>`).join('');
 
     window._dealsCache = items;
   } catch(err){
-    hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1"><p>Could not load deals. Check connection.</p></div>`;
+    hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1">Could not load deals. Please try again.</div>`;
   }
 }
 
-// === SEARCH ===
+// === SHOW PRODUCT FROM DEALS CACHE ===
+function showProductFromDeals(idx){
+  const cache = window._dealsCache || [];
+  const d = cache[idx];
+  if(!d) return;
+  showProductDetail(d);
+}
+
+// === SEARCH (live via SerpApi) ===
 async function doSearch(q){
   if(!q.trim()){ showToast('Enter a product name'); return; }
   navTo('search');
@@ -363,42 +385,42 @@ async function doSearch(q){
   r.innerHTML = `<div class="loading"><div class="spin"></div>Searching live prices...</div>`;
 
   try {
-    const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+    const res = await fetch('/api/search?q=' + encodeURIComponent(q));
     const data = await res.json();
     const items = data.results || [];
 
     if(items.length === 0){
-      r.innerHTML = `<div class="empty"><p>No results for "${q}". Try different keywords.</p></div>`;
+      r.innerHTML = `<div class="empty">No results for "${q}". Try different keywords.</div>`;
       return;
     }
 
-    r.innerHTML = items.map(d=>`
-      <div class="pc" onclick="showProductByItem(${d.id}, '${encodeURIComponent(d.name)}')">
-        <div class="pe">${imgOrEmoji(d.image,'🛍️')}</div>
+    window._searchCache = items;
+
+    r.innerHTML = items.map((d,i)=>`
+      <div class="pc" onclick="showProductFromSearch(${i})">
+        <div class="pe">${imgEl(d.image,'🛍️')}</div>
         <div class="pi">
           <div class="pn">${d.name}</div>
-          <div class="pm">${d.store} ${d.rating ? '· ⭐ '+d.rating : ''}</div>
+          <div class="pm">${d.store}${d.rating ? ' · ⭐ '+d.rating : ''}</div>
           <div class="pb">
-            <div class="pp">$${d.price.toFixed(2)}</div>
-            <div class="pd">${d.drop ? '-'+d.drop+'% off' : 'Live price'}</div>
+            <div class="pp">$${parseFloat(d.price).toFixed(2)}</div>
+            <div class="pd">${d.tag || 'Live price'}</div>
           </div>
         </div>
       </div>`).join('');
-
-    window._searchCache = items;
   } catch(err){
-    r.innerHTML = `<div class="empty"><p>Search failed. Please try again.</p></div>`;
+    r.innerHTML = `<div class="empty">Search failed. Please try again.</div>`;
   }
 }
 
-// === PRODUCT DETAIL ===
-async function showProductByItem(id, nameEncoded){
-  const cache = window._searchCache || window._dealsCache || [];
-  const d = cache.find(x=>x.id===id);
+function showProductFromSearch(idx){
+  const cache = window._searchCache || [];
+  const d = cache[idx];
   if(!d) return;
   showProductDetail(d);
 }
 
+// === PRODUCT DETAIL ===
 async function showProductDetail(d){
   navTo('product');
   const detail = document.getElementById('product-detail');
@@ -410,18 +432,24 @@ async function showProductDetail(d){
     <div class="loading"><div class="spin"></div>Comparing prices across stores...</div>`;
 
   try {
-    const res = await fetch(`/api/compare?q=${encodeURIComponent(d.name)}`);
+    const res = await fetch('/api/compare?q=' + encodeURIComponent(d.name));
     const data = await res.json();
     const stores = data.stores || [];
 
     if(stores.length === 0){
+      // Fallback - bezpośredni link do produktu
       detail.innerHTML = `
         <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
-        <div class="empty"><p>No price comparison available.</p></div>`;
+        <div style="background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:24px;text-align:center;box-shadow:var(--sh)">
+          <div style="font-size:48px;margin-bottom:16px">${imgEl(d.image,'🛍️')}</div>
+          <h3 style="font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:8px">${d.name}</h3>
+          <p style="font-size:14px;color:var(--t2);margin-bottom:20px">${d.store} · $${parseFloat(d.price).toFixed(2)}</p>
+          <button onclick="window.open('${d.link}','_blank')" style="background:var(--t);border:none;border-radius:var(--r);padding:16px 32px;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;width:100%">
+            Buy for $${parseFloat(d.price).toFixed(2)} at ${d.store} →
+          </button>
+        </div>`;
       return;
     }
-
-    currentProductLink = stores[0].link;
 
     detail.innerHTML = `
       <div class="br">
@@ -430,17 +458,17 @@ async function showProductDetail(d){
       </div>
       <div class="cc">
         <div class="ch">
-          <div class="cem">${imgOrEmoji(d.image,'🛍️')}</div>
+          <div class="cem">${imgEl(d.image,'🛍️')}</div>
           <div class="ci">
             <h3>${d.name}</h3>
-            <p>Best price: <strong style="color:var(--green)">$${stores[0].price.toFixed(2)}</strong> at ${stores[0].name}</p>
+            <p>Best: <strong style="color:var(--green)">$${stores[0].price.toFixed(2)}</strong> at ${stores[0].name}</p>
           </div>
         </div>
         ${stores.map(s=>`
           <div class="sr">
             <div class="snw">
               <div class="sn">${s.name} ${s.best?'<span class="bp">best</span>':''}</div>
-              <div class="ss">${s.shipping || 'Check store'} ${s.rating ? '· ⭐ '+s.rating : ''}</div>
+              <div class="ss">${s.shipping || 'Check store'}${s.rating ? ' · ⭐ '+s.rating : ''}</div>
             </div>
             <div class="srr">
               <div class="spr ${s.best?'best':''}">$${s.price.toFixed(2)}</div>
@@ -448,16 +476,16 @@ async function showProductDetail(d){
             </div>
           </div>`).join('')}
       </div>
-      <div style="background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;box-shadow:var(--sh);text-align:center">
-        <p style="font-size:13px;color:var(--t2);margin-bottom:12px">Best deal found — buy directly</p>
-        <button onclick="window.open('${stores[0].link}','_blank')" style="background:var(--green);border:none;border-radius:var(--r);padding:16px 32px;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;width:100%">
-          Buy for $${stores[0].price.toFixed(2)} at ${stores[0].name} →
-        </button>
-      </div>`;
+      <button onclick="window.open('${stores[0].link}','_blank')" style="background:var(--green);border:none;border-radius:var(--r);padding:16px;width:100%;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;margin-top:4px">
+        Best deal: $${stores[0].price.toFixed(2)} at ${stores[0].name} →
+      </button>`;
   } catch(err){
+    // Fallback na bezpośredni link
     detail.innerHTML = `
       <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
-      <div class="empty"><p>Could not load prices. Please try again.</p></div>`;
+      <button onclick="window.open('${d.link}','_blank')" style="background:var(--t);border:none;border-radius:var(--r);padding:16px;width:100%;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;">
+        Buy at ${d.store} →
+      </button>`;
   }
 }
 
@@ -498,6 +526,7 @@ function showToast(msg){
 
 window.onload=()=>{
   loadDeals('all');
+  renderWatchlist();
 };
 </script>
 </body>
