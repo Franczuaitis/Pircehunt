@@ -297,7 +297,12 @@ function navTo(page, el){
   document.getElementById('content').scrollTop=0;
   if(page==='watch') renderWatchlist();
   if(page==='profile') renderProfile();
-  if(page==='home'){ currentCat='all'; loadDeals('all'); }
+  if(page==='home'){ 
+  currentCat='all'; 
+  document.getElementById('hot-deals').innerHTML='<div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div>';
+  document.getElementById('price-drops').innerHTML='';
+  loadDeals('all'); 
+}
 }
 
 function goBack(){
@@ -440,7 +445,8 @@ async function showProductDetail(d){
     if(stores.length === 0){
       // Fallback - bezpośredni link do produktu
       detail.innerHTML = `
-        <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
+        <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class=
+        "bt">${d.name}</div></div>
         <div style="background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:24px;text-align:center;box-shadow:var(--sh)">
           <div style="font-size:48px;margin-bottom:16px">${imgEl(d.image,'🛍️')}</div>
           <h3 style="font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:8px">${d.name}</h3>
