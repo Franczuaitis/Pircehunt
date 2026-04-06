@@ -7,12 +7,10 @@ app.use(express.json());
 app.use(express.static(__dirname));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
-// === CONFIG ===
 const SERP_KEY = process.env.SERP_API_KEY;
 const SUPA_URL = process.env.SUPABASE_URL;
 const SUPA_KEY = process.env.SUPABASE_KEY;
 
-// === HELPERS ===
 function httpGet(url) {
   return new Promise((resolve, reject) => {
     https.get(url, (res) => {
@@ -20,40 +18,50 @@ function httpGet(url) {
       res.on('data', c => data += c);
       res.on('end', () => {
         try { resolve(JSON.parse(data)); }
-        catch(e) { reject(e); }
+        catch(e) { reject(new Error('JSON parse error: ' + data.slice(0, 100))); }
       });
     }).on('error', reject);
   });
 }
 
-function supaFetch(path, options = {}) {
+function supaFetch(endpoint, options = {}) {
   return new Promise((resolve, reject) => {
-    const url = new URL(SUPA_URL + path);
-    const opts = {
+    const fullUrl = SUPA_URL + endpoint;
+    const parsed = new URL(fullUrl);
+    const reqOptions = {
+      hostname: parsed.hostname,
+      path: parsed.pathname + parsed.search,
       method: options.method || 'GET',
       headers: {
         'apikey': SUPA_KEY,
-        'Authorization': `Bearer ${SUPA_KEY}`,
+        'Authorization': 'Bearer ' + SUPA_KEY,
         'Content-Type': 'application/json',
         'Prefer': options.prefer || 'return=minimal',
-        ...options.headers,
+        ...(options.headers || {}),
       },
     };
-    const req = https.request(url, opts, (res) => {
+    const req = https.request(reqOptions, (res) => {
       let data = '';
       res.on('data', c => data += c);
       res.on('end', () => {
+        console.log(`[SUPA] ${options.method||'GET'} ${endpoint.slice(0,50)} → ${res.statusCode}`);
+        if (data) console.log(`[SUPA] Response: ${data.slice(0, 200)}`);
         try { resolve(data ? JSON.parse(data) : {}); }
         catch(e) { resolve({}); }
       });
     });
-    req.on('error', reject);
-    if (options.body) req.write(JSON.stringify(options.body));
+    req.on('error', (e) => {
+      console.error('[SUPA] Request error:', e.message);
+      reject(e);
+    });
+    if (options.body) {
+      const body = JSON.stringify(options.body);
+      req.write(body);
+    }
     req.end();
   });
 }
 
-// === SERP API ===
 function serpSearch(query, extra = {}) {
   const params = new URLSearchParams({
     engine: 'google_shopping',
@@ -64,10 +72,9 @@ function serpSearch(query, extra = {}) {
     api_key: SERP_KEY,
     ...extra,
   });
-  return httpGet(`https://serpapi.com/search.json?${params}`);
+  return httpGet('https://serpapi.com/search.json?' + params.toString());
 }
 
-// === SCAN & SAVE DEALS ===
 const SCAN_QUERIES = [
   { query: 'electronics deals discount', cat: 'electronics' },
   { query: 'nike adidas shoes sale', cat: 'fashion' },
@@ -81,20 +88,23 @@ const SCAN_QUERIES = [
 async function scanAndSave() {
   console.log('[SCAN] Starting deals scan...');
   if (!SERP_KEY || !SUPA_URL || !SUPA_KEY) {
-    console.log('[SCAN] Missing API keys, skipping scan');
+    console.log('[SCAN] Missing API keys:', { serp: !!SERP_KEY, supa_url: !!SUPA_URL, supa_key: !!SUPA_KEY });
     return;
   }
 
   for (const { query, cat } of SCAN_QUERIES) {
     try {
-      console.log(`[SCAN] Scanning: ${query}`);
+      console.log('[SCAN] Scanning:', query);
       const data = await serpSearch(query);
-      const items = (data.shopping_results || [])
+      const raw = data.shopping_results || [];
+      console.log('[SCAN] Raw results:', raw.length, 'for', cat);
+
+      const items = raw
         .filter(item => item.link && item.price)
         .map(item => ({
           name: item.title,
           store: item.source,
-          price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
+          price: parseFloat((item.price || '').replace(/[^0-9.]/g, '')) || 0,
           image: item.thumbnail || null,
           link: item.link,
           rating: item.rating ? parseFloat(item.rating) : null,
@@ -105,46 +115,35 @@ async function scanAndSave() {
         .filter(i => i.price > 0)
         .slice(0, 10);
 
+      console.log('[SCAN] Filtered items:', items.length, 'for', cat);
+
       if (items.length > 0) {
-        // Delete old deals for this category
-        await supaFetch(
-          `/rest/v1/deals?category=eq.${cat}&found_at=lt.${new Date(Date.now() - 12*60*60*1000).toISOString()}`,
-          { method: 'DELETE' }
-        );
-        // Insert new deals
-        await supaFetch('/rest/v1/deals', {
+        const result = await supaFetch('/rest/v1/deals', {
           method: 'POST',
           body: items,
-          prefer: 'return=minimal',
+          prefer: 'return=representation',
         });
-        console.log(`[SCAN] Saved ${items.length} deals for ${cat}`);
+        console.log('[SCAN] Saved to Supabase:', cat, Array.isArray(result) ? result.length : result);
       }
 
-      // Wait 2s between requests to avoid rate limiting
       await new Promise(r => setTimeout(r, 2000));
     } catch (err) {
-      console.error(`[SCAN] Error scanning ${cat}:`, err.message);
+      console.error('[SCAN] Error for', cat, ':', err.message);
     }
   }
   console.log('[SCAN] Done.');
 }
 
-// === CRON: run every 6 hours ===
 const SIX_HOURS = 6 * 60 * 60 * 1000;
-scanAndSave(); // run on startup
+scanAndSave();
 setInterval(scanAndSave, SIX_HOURS);
 
-// === API: Get deals from Supabase ===
 app.get('/api/deals', async (req, res) => {
   const cat = req.query.cat || 'all';
   try {
-    let url = `/rest/v1/deals?select=*&order=found_at.desc&limit=20`;
-    if (cat !== 'all') url += `&category=eq.${cat}`;
-
-    const data = await supaFetch(url, {
-      headers: { 'Range': '0-19' }
-    });
-
+    let endpoint = '/rest/v1/deals?select=*&order=found_at.desc&limit=20';
+    if (cat !== 'all') endpoint += '&category=eq.' + cat;
+    const data = await supaFetch(endpoint);
     res.json({ results: Array.isArray(data) ? data : [] });
   } catch (err) {
     console.error('Deals error:', err.message);
@@ -152,11 +151,9 @@ app.get('/api/deals', async (req, res) => {
   }
 });
 
-// === API: Search live via SerpApi ===
 app.get('/api/search', async (req, res) => {
   const q = req.query.q;
   if (!q) return res.json({ results: [] });
-
   try {
     const data = await serpSearch(q);
     const results = (data.shopping_results || [])
@@ -165,14 +162,13 @@ app.get('/api/search', async (req, res) => {
         id: i,
         name: item.title,
         store: item.source,
-        price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
+        price: parseFloat((item.price || '').replace(/[^0-9.]/g, '')) || 0,
         image: item.thumbnail || null,
         link: item.link,
         rating: item.rating ? parseFloat(item.rating) : null,
         tag: item.tag || null,
       }))
       .filter(r => r.price > 0);
-
     res.json({ results });
   } catch (err) {
     console.error('Search error:', err.message);
@@ -180,18 +176,16 @@ app.get('/api/search', async (req, res) => {
   }
 });
 
-// === API: Compare prices for a product ===
 app.get('/api/compare', async (req, res) => {
   const q = req.query.q;
   if (!q) return res.json({ stores: [] });
-
   try {
     const data = await serpSearch(q, { num: 10 });
     const stores = (data.shopping_results || [])
       .filter(item => item.link && item.price)
       .map(item => ({
         name: item.source,
-        price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
+        price: parseFloat((item.price || '').replace(/[^0-9.]/g, '')) || 0,
         link: item.link,
         shipping: item.delivery || 'Check store',
         rating: item.rating ? parseFloat(item.rating) : null,
@@ -200,7 +194,6 @@ app.get('/api/compare', async (req, res) => {
       .filter(r => r.price > 0)
       .sort((a, b) => a.price - b.price)
       .slice(0, 5);
-
     if (stores.length > 0) stores[0].best = true;
     res.json({ stores });
   } catch (err) {
@@ -209,7 +202,6 @@ app.get('/api/compare', async (req, res) => {
   }
 });
 
-// === Health check ===
 app.get('/health', (req, res) => res.json({
   ok: true,
   app: 'PriceHunt',
@@ -218,4 +210,4 @@ app.get('/health', (req, res) => res.json({
 }));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`PriceHunt running on port ${PORT}`));
+app.listen(PORT, () => console.log('PriceHunt running on port', PORT));
