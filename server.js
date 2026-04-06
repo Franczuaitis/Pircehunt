@@ -1,505 +1,221 @@
+const express = require('express');
+const https = require('https');
+const path = require('path');
+const app = express();
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#ffffff">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="PriceHunt">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/icon.svg">
-<title>PriceHunt</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#fafaf8;--s:#ffffff;--s2:#f4f4f0;--b:rgba(0,0,0,0.08);--b2:rgba(0,0,0,0.14);--t:#111110;--t2:#6b6b68;--t3:#a8a8a5;--green:#2d6a4f;--red:#c0392b;--blue:#1a6fad;--r:16px;--rsm:10px;--sh:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);--shm:0 4px 16px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-size:15px;}
-.app{display:flex;flex-direction:column;height:100vh;height:100dvh;}
-.topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:rgba(250,250,248,0.92);border-bottom:1px solid var(--b);flex-shrink:0;backdrop-filter:blur(20px);}
-.logo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--t);flex-shrink:0;letter-spacing:-0.3px;}
-.logo em{font-style:italic;color:var(--t2);}
-.sw{flex:1;position:relative;}
-.sw input{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:12px;padding:10px 16px 10px 40px;color:var(--t);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s,background .2s;}
-.sw input:focus{border-color:var(--b2);background:var(--s);}
-.sw input::placeholder{color:var(--t3);}
-.si{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none;}
-.sbtn{background:var(--t);border:none;border-radius:10px;padding:10px 18px;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;cursor:pointer;flex-shrink:0;transition:opacity .15s;}
-.sbtn:active{opacity:0.75;}
-.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
-.content::-webkit-scrollbar{display:none;}
-.bottomnav{display:flex;background:rgba(250,250,248,0.95);border-top:1px solid var(--b);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(20px);}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;border:none;background:none;color:var(--t3);cursor:pointer;font-size:10px;font-family:'DM Sans',sans-serif;font-weight:500;transition:color .15s;}
-.nb.active{color:var(--t);}
-.ni{font-size:20px;line-height:1;}
-.page{display:none;padding:20px;animation:fu .2s ease;}
-.page.active{display:block;}
-@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
-.stat{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px 12px;text-align:center;box-shadow:var(--sh);}
-.sv{font-family:'DM Serif Display',serif;font-size:22px;letter-spacing:-0.3px;}
-.sl{font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);margin-top:3px;}
-.cats{display:flex;gap:6px;overflow-x:auto;padding:0 0 4px;scrollbar-width:none;margin-bottom:24px;}
-.cats::-webkit-scrollbar{display:none;}
-.cat{flex-shrink:0;background:var(--s);border:1px solid var(--b);border-radius:99px;padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;color:var(--t2);}
-.cat:hover{border-color:var(--b2);color:var(--t);}
-.cat.active{background:var(--t);border-color:var(--t);color:white;}
-.sh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;}
-.st{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:-0.3px;}
-.sa{font-size:13px;color:var(--t2);cursor:pointer;font-weight:500;text-decoration:underline;text-underline-offset:3px;}
-.dg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;}
-.dc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .2s;position:relative;box-shadow:var(--sh);}
-.dc:hover{box-shadow:var(--shm);transform:translateY(-2px);border-color:var(--b2);}
-.dc:active{transform:translateY(0);}
-.de{width:100%;height:80px;background:var(--s2);border-radius:var(--rsm);margin-bottom:12px;object-fit:contain;display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.de img{width:100%;height:100%;object-fit:contain;}
-.de-emoji{font-size:36px;}
-.dn{font-size:13px;font-weight:500;margin-bottom:3px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
-.ds{font-size:11px;color:var(--t3);margin-bottom:8px;}
-.dp{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.dpn{font-family:'DM Serif Display',serif;font-size:18px;letter-spacing:-0.2px;}
-.dps{font-size:10px;font-weight:600;color:var(--green);background:rgba(45,106,79,0.08);padding:2px 6px;border-radius:99px;}
-.pl{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
-.pc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:14px;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}
-.pc:hover{box-shadow:var(--shm);border-color:var(--b2);}
-.pe{width:60px;height:60px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;}
-.pe img{width:100%;height:100%;object-fit:contain;}
-.pi{flex:1;min-width:0;}
-.pn{font-size:14px;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.pm{font-size:12px;color:var(--t2);margin-bottom:8px;}
-.pb{display:flex;align-items:center;justify-content:space-between;}
-.pp{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:-0.3px;}
-.pd{font-size:12px;font-weight:600;color:var(--green);}
-.hero{padding:28px 0 20px;text-align:center;}
-.he{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;}
-.hero h1{font-family:'DM Serif Display',serif;font-size:32px;line-height:1.15;margin-bottom:8px;letter-spacing:-0.5px;}
-.hero h1 em{font-style:italic;color:var(--t2);}
-.hero p{font-size:14px;color:var(--t2);margin-bottom:22px;line-height:1.6;}
-.hs{display:flex;gap:8px;max-width:480px;margin:0 auto;}
-.hs input{flex:1;background:var(--s);border:1px solid var(--b2);border-radius:14px;padding:14px 18px;color:var(--t);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;box-shadow:var(--sh);}
-.hs input:focus{border-color:var(--t);}
-.hs button{background:var(--t);border:none;border-radius:14px;padding:14px 22px;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;cursor:pointer;white-space:nowrap;transition:opacity .15s;}
-.hs button:active{opacity:0.75;}
-.br{display:flex;align-items:center;gap:12px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--b);}
-.bb{background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;color:var(--t);font-family:'DM Sans',sans-serif;}
-.bt{font-size:15px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.cc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:16px;box-shadow:var(--sh);}
-.ch{padding:18px;border-bottom:1px solid var(--b);display:flex;gap:14px;align-items:center;}
-.cem{width:56px;height:56px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;}
-.cem img{width:100%;height:100%;object-fit:contain;}
-.ci h3{font-size:15px;font-weight:500;margin-bottom:4px;}
-.ci p{font-size:13px;color:var(--t2);}
-.sr{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b);gap:12px;transition:background .15s;}
-.sr:last-child{border:none;}
-.sr:hover{background:var(--s2);}
-.snw{flex:1;}
-.sn{font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px;}
-.ss{font-size:12px;color:var(--t2);margin-top:1px;}
-.bp{font-size:9px;font-weight:600;background:var(--green);color:white;padding:2px 6px;border-radius:99px;text-transform:uppercase;}
-.srr{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
-.spr{font-family:'DM Serif Display',serif;font-size:18px;letter-spacing:-0.2px;}
-.spr.best{color:var(--green);}
-.bybtn{background:var(--t);border:none;border-radius:var(--rsm);padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;color:white;font-family:'DM Sans',sans-serif;transition:opacity .15s;}
-.bybtn:active{opacity:0.75;}
-.bybtn.sec{background:var(--s2);color:var(--t);border:1px solid var(--b2);}
-.wi{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:10px;box-shadow:var(--sh);}
-.we{width:44px;height:44px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-.wii{flex:1;}
-.wn{font-size:14px;font-weight:500;margin-bottom:2px;}
-.wt{font-size:12px;color:var(--t2);}
-.wpr{font-family:'DM Serif Display',serif;font-size:17px;}
-.wpr.hit{color:var(--green);}
-.ph{background:var(--t);border-radius:20px;padding:28px 24px;margin-bottom:20px;color:white;text-align:center;}
-.ph h2{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px;letter-spacing:-0.4px;}
-.ph h2 em{font-style:italic;opacity:0.65;}
-.ph p{font-size:14px;opacity:0.6;margin-bottom:24px;line-height:1.6;}
-.plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
-.plan{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;transition:all .15s;}
-.plan.pop{background:white;border-color:white;}
-.plb{font-size:9px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:8px;display:inline-block;letter-spacing:0.06em;text-transform:uppercase;background:rgba(255,255,255,0.2);color:white;}
-.plan.pop .plb{background:var(--green);color:white;}
-.plna{font-size:11px;opacity:0.55;margin-bottom:4px;color:white;}
-.plan.pop .plna{color:var(--t2);opacity:1;}
-.plpr{font-family:'DM Serif Display',serif;font-size:26px;color:white;letter-spacing:-0.4px;}
-.plan.pop .plpr{color:var(--t);}
-.plpe{font-size:11px;opacity:0.45;color:white;margin-top:1px;}
-.plan.pop .plpe{color:var(--t2);opacity:1;}
-.plsa{font-size:10px;font-weight:600;color:rgba(255,255,255,0.5);margin-top:3px;}
-.plan.pop .plsa{color:var(--green);}
-.fl{text-align:left;margin-bottom:20px;}
-.fe{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:14px;opacity:0.75;}
-.fe:last-child{border:none;}
-.fck{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
-.ctabtn{background:white;border:none;border-radius:var(--r);padding:16px;width:100%;color:var(--t);font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;cursor:pointer;}
-.ctan{font-size:11px;opacity:0.35;margin-top:10px;}
-.ptop{text-align:center;padding:28px 0 20px;}
-.av{width:72px;height:72px;border-radius:50%;background:var(--s2);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 14px;}
-.pna{font-family:'DM Serif Display',serif;font-size:22px;letter-spacing:-0.3px;}
-.ppl{font-size:13px;color:var(--t2);margin-top:4px;}
-.mi{display:flex;align-items:center;gap:14px;padding:16px;background:var(--s);border:1px solid var(--b);border-radius:var(--r);margin-bottom:8px;cursor:pointer;box-shadow:var(--sh);transition:all .15s;}
-.mi:hover{border-color:var(--b2);}
-.mic{font-size:18px;width:22px;text-align:center;flex-shrink:0;}
-.mil{flex:1;font-size:14px;font-weight:500;}
-.mia{color:var(--t3);font-size:16px;}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--t);border-radius:99px;padding:11px 22px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;color:white;box-shadow:var(--shm);}
-.toast.show{opacity:1;}
-.loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px;color:var(--t2);font-size:14px;}
-.spin{width:18px;height:18px;border:2px solid var(--b2);border-top-color:var(--t);border-radius:50%;animation:spin .7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.empty{text-align:center;padding:40px 20px;color:var(--t2);}
-.empty p{font-size:14px;margin-top:8px;}
-@media(max-width:360px){.dg{grid-template-columns:1fr;}.plans{grid-template-columns:1fr;}}
-</style>
-</head>
-<body>
-<div class="app">
-  <div class="topbar">
-    <div class="logo">Price<em>Hunt</em></div>
-    <div class="sw">
-      <svg class="si" width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.3"/><path d="M10.5 10.5L13.5 13.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-      <input type="text" id="top-search" placeholder="Search any product..." onkeydown="if(event.key==='Enter')doSearch(this.value)">
-    </div>
-    <button class="sbtn" onclick="doSearch(document.getElementById('top-search').value)">Search</button>
-  </div>
+app.use(express.json());
+app.use(express.static(__dirname));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
-  <div class="content" id="content">
-    <div id="page-home" class="page active">
-      <div class="stats">
-        <div class="stat"><div class="sv">12K+</div><div class="sl">Stores</div></div>
-        <div class="stat"><div class="sv">Live</div><div class="sl">Prices</div></div>
-        <div class="stat"><div class="sv">Free</div><div class="sl">To use</div></div>
-      </div>
-      <div class="cats" id="cats">
-        <div class="cat active" onclick="loadDeals('best deals today',this)">🔥 Hot</div>
-        <div class="cat" onclick="loadDeals('electronics deals',this)">Electronics</div>
-        <div class="cat" onclick="loadDeals('fashion sale',this)">Fashion</div>
-        <div class="cat" onclick="loadDeals('home appliances deal',this)">Home</div>
-        <div class="cat" onclick="loadDeals('sports equipment sale',this)">Sports</div>
-        <div class="cat" onclick="loadDeals('beauty products deal',this)">Beauty</div>
-        <div class="cat" onclick="loadDeals('gaming deals',this)">Gaming</div>
-        <div class="cat" onclick="loadDeals('books deals',this)">Books</div>
-      </div>
-      <div class="sh"><div class="st">Hot deals</div><span class="sa" onclick="navTo('search')">See all</span></div>
-      <div class="dg" id="hot-deals"><div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div></div>
-      <div class="sh"><div class="st">Biggest drops</div></div>
-      <div class="pl" id="price-drops"></div>
-    </div>
+// === CONFIG ===
+const SERP_KEY = process.env.SERP_API_KEY;
+const SUPA_URL = process.env.SUPABASE_URL;
+const SUPA_KEY = process.env.SUPABASE_KEY;
 
-    <div id="page-search" class="page">
-      <div class="hero">
-        <div class="he">Real prices · Live data</div>
-        <h1>Find the <em>best price</em><br>anywhere</h1>
-        <p>We search thousands of stores in real time</p>
-        <div class="hs">
-          <input type="text" id="hero-search" placeholder="Nike shoes, iPhone 16, PS5...">
-          <button onclick="doSearch(document.getElementById('hero-search').value)">Search</button>
-        </div>
-      </div>
-      <div id="search-results-wrap" style="display:none">
-        <div id="search-results"></div>
-      </div>
-      <div id="search-empty">
-        <div class="sh"><div class="st">Try searching for...</div></div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px">
-          <span onclick="doSearch('Nike Air Max')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">Nike Air Max</span>
-          <span onclick="doSearch('iPhone 16')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">iPhone 16</span>
-          <span onclick="doSearch('PS5')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">PS5</span>
-          <span onclick="doSearch('MacBook Air')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">MacBook Air</span>
-          <span onclick="doSearch('Dyson vacuum')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">Dyson vacuum</span>
-          <span onclick="doSearch('AirPods Pro')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">AirPods Pro</span>
-        </div>
-      </div>
-    </div>
-
-    <div id="page-product" class="page"><div id="product-detail"></div></div>
-
-    <div id="page-watch" class="page">
-      <div class="sh"><div class="st">Price alerts</div></div>
-      <div id="watchlist-items"></div>
-      <div style="margin-top:16px">
-        <button onclick="navTo('premium')" style="background:var(--t);border:none;border-radius:var(--r);padding:15px;width:100%;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;cursor:pointer;">Set price alert — Premium</button>
-      </div>
-    </div>
-
-    <div id="page-premium" class="page">
-      <div class="ph">
-        <h2>Go <em>Premium</em></h2>
-        <p>Unlimited searches, instant alerts, and exclusive deals across every store worldwide</p>
-        <div class="plans">
-          <div class="plan" onclick="selectPlan('monthly',this)">
-            <div class="plna">Monthly</div>
-            <div class="plpr">$4.99</div>
-            <div class="plpe">per month</div>
-          </div>
-          <div class="plan pop" onclick="selectPlan('yearly',this)">
-            <div class="plb">Best value</div>
-            <div class="plna">Yearly</div>
-            <div class="plpr">$2.99</div>
-            <div class="plpe">per month</div>
-            <div class="plsa">Save 40%</div>
-          </div>
-        </div>
-        <div class="fl">
-          <div class="fe"><div class="fck">✓</div>Unlimited product searches</div>
-          <div class="fe"><div class="fck">✓</div>Instant price drop alerts</div>
-          <div class="fe"><div class="fck">✓</div>Full price history charts</div>
-          <div class="fe"><div class="fck">✓</div>All 12,000+ global stores</div>
-          <div class="fe"><div class="fck">✓</div>AI price predictions</div>
-          <div class="fe"><div class="fck">✓</div>Multi-device sync</div>
-        </div>
-        <button class="ctabtn" onclick="subscribe()" id="sub-btn">Start free 7-day trial</button>
-        <div class="ctan">Cancel anytime · No credit card required</div>
-      </div>
-    </div>
-
-    <div id="page-profile" class="page">
-      <div class="ptop">
-        <div class="av">👤</div>
-        <div class="pna">Guest</div>
-        <div class="ppl" id="profile-plan">Free plan</div>
-      </div>
-      <div class="mi" onclick="navTo('premium')"><span class="mic">⭐</span><span class="mil">Upgrade to Premium</span><span class="mia">›</span></div>
-      <div class="mi" onclick="navTo('watch')"><span class="mic">🔔</span><span class="mil">Price Alerts</span><span class="mia">›</span></div>
-      <div class="mi"><span class="mic">🌍</span><span class="mil">Currency and Region</span><span class="mia">›</span></div>
-      <div class="mi"><span class="mic">❓</span><span class="mil">Help and Support</span><span class="mia">›</span></div>
-    </div>
-  </div>
-
-  <div class="bottomnav">
-    <button class="nb active" onclick="navTo('home',this)" id="nav-home"><span class="ni">🏠</span>Home</button>
-    <button class="nb" onclick="navTo('search',this)" id="nav-search"><span class="ni">🔍</span>Search</button>
-    <button class="nb" onclick="navTo('watch',this)" id="nav-watch"><span class="ni">🔔</span>Alerts</button>
-    <button class="nb" onclick="navTo('premium',this)" id="nav-premium"><span class="ni">⭐</span>Premium</button>
-    <button class="nb" onclick="navTo('profile',this)" id="nav-profile"><span class="ni">👤</span>Profile</button>
-  </div>
-</div>
-<div class="toast" id="toast"></div>
-
-<script>
-const TAG = 'pricehunt20-20';
-let currentPage = 'home';
-let prevPage = 'home';
-let currentProductLink = null;
-
-const PAGES = ['home','search','product','watch','premium','profile'];
-function navTo(page, el){
-  prevPage = currentPage;
-  currentPage = page;
-  PAGES.forEach(p=>{ const e=document.getElementById('page-'+p); if(e) e.classList.remove('active'); });
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
-  const pg=document.getElementById('page-'+page); if(pg) pg.classList.add('active');
-  const nb=document.getElementById('nav-'+page); if(nb) nb.classList.add('active'); else if(el) el.classList.add('active');
-  document.getElementById('content').scrollTop=0;
-  if(page==='watch') renderWatchlist();
-  if(page==='profile') renderProfile();
-}
-function goBack(){ navTo(prevPage); }
-
-function imgOrEmoji(url, fallback){
-  if(url) return `<img src="${url}" onerror="this.style.display='none';this.parentNode.innerHTML='<span class=de-emoji>${fallback}</span>'">`;
-  return `<span class="de-emoji">${fallback}</span>`;
+// === HELPERS ===
+function httpGet(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try { resolve(JSON.parse(data)); }
+        catch(e) { reject(e); }
+      });
+    }).on('error', reject);
+  });
 }
 
-// === LOAD DEALS (real data from SerpApi) ===
-async function loadDeals(query, el){
-  if(el){
-    document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
-    el.classList.add('active');
-  }
-  const hotDeals = document.getElementById('hot-deals');
-  const priceDrops = document.getElementById('price-drops');
-  hotDeals.innerHTML = `<div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading live deals...</div>`;
-  priceDrops.innerHTML = '';
-
-  try {
-    const res = await fetch(`/api/deals?cat=${encodeURIComponent(query)}`);
-    const data = await res.json();
-    const items = data.results || [];
-
-    if(items.length === 0){
-      hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1"><p>No deals found. Try another category.</p></div>`;
-      return;
-    }
-
-    hotDeals.innerHTML = items.slice(0,6).map(d=>`
-      <div class="dc" onclick="showProductByItem(${d.id})">
-        <div class="de">${imgOrEmoji(d.image,'🛍️')}</div>
-        <div class="dn">${d.name}</div>
-        <div class="ds">${d.store}</div>
-        <div class="dp">
-          <div class="dpn">$${d.price.toFixed(2)}</div>
-          ${d.tag ? `<div class="dps">${d.tag}</div>` : ''}
-        </div>
-      </div>`).join('');
-
-    priceDrops.innerHTML = items.slice(6,12).map(d=>`
-      <div class="pc" onclick="showProductByItem(${d.id})">
-        <div class="pe">${imgOrEmoji(d.image,'🛍️')}</div>
-        <div class="pi">
-          <div class="pn">${d.name}</div>
-          <div class="pm">${d.store}</div>
-          <div class="pb"><div class="pp">$${d.price.toFixed(2)}</div><div class="pd">${d.rating ? '⭐ '+d.rating : ''}</div></div>
-        </div>
-      </div>`).join('');
-
-    window._dealsCache = items;
-  } catch(err){
-    hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1"><p>Could not load deals. Check connection.</p></div>`;
-  }
+function supaFetch(path, options = {}) {
+  return new Promise((resolve, reject) => {
+    const url = new URL(SUPA_URL + path);
+    const opts = {
+      method: options.method || 'GET',
+      headers: {
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': options.prefer || 'return=minimal',
+        ...options.headers,
+      },
+    };
+    const req = https.request(url, opts, (res) => {
+      let data = '';
+      res.on('data', c => data += c);
+      res.on('end', () => {
+        try { resolve(data ? JSON.parse(data) : {}); }
+        catch(e) { resolve({}); }
+      });
+    });
+    req.on('error', reject);
+    if (options.body) req.write(JSON.stringify(options.body));
+    req.end();
+  });
 }
 
-// === SEARCH ===
-async function doSearch(q){
-  if(!q.trim()){ showToast('Enter a product name'); return; }
-  navTo('search');
-  document.getElementById('hero-search').value = q;
-  document.getElementById('top-search').value = q;
-  document.getElementById('search-results-wrap').style.display = 'block';
-  document.getElementById('search-empty').style.display = 'none';
-
-  const r = document.getElementById('search-results');
-  r.innerHTML = `<div class="loading"><div class="spin"></div>Searching live prices...</div>`;
-
-  try {
-    const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
-    const data = await res.json();
-    const items = data.results || [];
-
-    if(items.length === 0){
-      r.innerHTML = `<div class="empty"><p>No results for "${q}". Try different keywords.</p></div>`;
-      return;
-    }
-
-    r.innerHTML = items.map(d=>`
-      <div class="pc" onclick="showProductByItem(${d.id}, '${encodeURIComponent(d.name)}')">
-        <div class="pe">${imgOrEmoji(d.image,'🛍️')}</div>
-        <div class="pi">
-          <div class="pn">${d.name}</div>
-          <div class="pm">${d.store} ${d.rating ? '· ⭐ '+d.rating : ''}</div>
-          <div class="pb">
-            <div class="pp">$${d.price.toFixed(2)}</div>
-            <div class="pd">${d.drop ? '-'+d.drop+'% off' : 'Live price'}</div>
-          </div>
-        </div>
-      </div>`).join('');
-
-    window._searchCache = items;
-  } catch(err){
-    r.innerHTML = `<div class="empty"><p>Search failed. Please try again.</p></div>`;
-  }
+// === SERP API ===
+function serpSearch(query, extra = {}) {
+  const params = new URLSearchParams({
+    engine: 'google_shopping',
+    q: query,
+    gl: 'us',
+    hl: 'en',
+    num: 20,
+    api_key: SERP_KEY,
+    ...extra,
+  });
+  return httpGet(`https://serpapi.com/search.json?${params}`);
 }
 
-// === PRODUCT DETAIL ===
-async function showProductByItem(id, nameEncoded){
-  const cache = window._searchCache || window._dealsCache || [];
-  const d = cache.find(x=>x.id===id);
-  if(!d) return;
-  showProductDetail(d);
-}
-
-async function showProductDetail(d){
-  navTo('product');
-  const detail = document.getElementById('product-detail');
-  detail.innerHTML = `
-    <div class="br">
-      <button class="bb" onclick="goBack()">← Back</button>
-      <div class="bt">${d.name}</div>
-    </div>
-    <div class="loading"><div class="spin"></div>Comparing prices across stores...</div>`;
-
-  try {
-    const res = await fetch(`/api/compare?q=${encodeURIComponent(d.name)}`);
-    const data = await res.json();
-    const stores = data.stores || [];
-
-    if(stores.length === 0){
-      detail.innerHTML = `
-        <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
-        <div class="empty"><p>No price comparison available.</p></div>`;
-      return;
-    }
-
-    currentProductLink = stores[0].link;
-
-    detail.innerHTML = `
-      <div class="br">
-        <button class="bb" onclick="goBack()">← Back</button>
-        <div class="bt">${d.name}</div>
-      </div>
-      <div class="cc">
-        <div class="ch">
-          <div class="cem">${imgOrEmoji(d.image,'🛍️')}</div>
-          <div class="ci">
-            <h3>${d.name}</h3>
-            <p>Best price: <strong style="color:var(--green)">$${stores[0].price.toFixed(2)}</strong> at ${stores[0].name}</p>
-          </div>
-        </div>
-        ${stores.map(s=>`
-          <div class="sr">
-            <div class="snw">
-              <div class="sn">${s.name} ${s.best?'<span class="bp">best</span>':''}</div>
-              <div class="ss">${s.shipping || 'Check store'} ${s.rating ? '· ⭐ '+s.rating : ''}</div>
-            </div>
-            <div class="srr">
-              <div class="spr ${s.best?'best':''}">$${s.price.toFixed(2)}</div>
-              <button class="${s.best?'bybtn':'bybtn sec'}" onclick="window.open('${s.link}','_blank')">Buy →</button>
-            </div>
-          </div>`).join('')}
-      </div>
-      <div style="background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;box-shadow:var(--sh);text-align:center">
-        <p style="font-size:13px;color:var(--t2);margin-bottom:12px">Best deal found — buy directly</p>
-        <button onclick="window.open('${stores[0].link}','_blank')" style="background:var(--green);border:none;border-radius:var(--r);padding:16px 32px;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;width:100%">
-          Buy for $${stores[0].price.toFixed(2)} at ${stores[0].name} →
-        </button>
-      </div>`;
-  } catch(err){
-    detail.innerHTML = `
-      <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
-      <div class="empty"><p>Could not load prices. Please try again.</p></div>`;
-  }
-}
-
-// === WATCHLIST ===
-const WATCHLIST = [
-  {name:'MacBook Air M3',emoji:'💻',target:999,current:1099},
-  {name:'Sony WH-1000XM5',emoji:'🎧',target:249,current:278},
+// === SCAN & SAVE DEALS ===
+const SCAN_QUERIES = [
+  { query: 'electronics deals discount', cat: 'electronics' },
+  { query: 'nike adidas shoes sale', cat: 'fashion' },
+  { query: 'home appliances deals', cat: 'home' },
+  { query: 'gaming console sale', cat: 'gaming' },
+  { query: 'sports equipment discount', cat: 'sports' },
+  { query: 'beauty skincare sale', cat: 'beauty' },
+  { query: 'books bestseller deals', cat: 'books' },
 ];
-function renderWatchlist(){
-  document.getElementById('watchlist-items').innerHTML = WATCHLIST.map(w=>`
-    <div class="wi">
-      <div class="we">${w.emoji}</div>
-      <div class="wii"><div class="wn">${w.name}</div><div class="wt">Alert below $${w.target}</div></div>
-      <div class="wpr ${w.current<=w.target?'hit':''}">${w.current<=w.target?'🎉 ':''}$${w.current}</div>
-    </div>`).join('');
+
+async function scanAndSave() {
+  console.log('[SCAN] Starting deals scan...');
+  if (!SERP_KEY || !SUPA_URL || !SUPA_KEY) {
+    console.log('[SCAN] Missing API keys, skipping scan');
+    return;
+  }
+
+  for (const { query, cat } of SCAN_QUERIES) {
+    try {
+      console.log(`[SCAN] Scanning: ${query}`);
+      const data = await serpSearch(query);
+      const items = (data.shopping_results || [])
+        .filter(item => item.link && item.price)
+        .map(item => ({
+          name: item.title,
+          store: item.source,
+          price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
+          image: item.thumbnail || null,
+          link: item.link,
+          rating: item.rating ? parseFloat(item.rating) : null,
+          category: cat,
+          tag: item.tag || null,
+          found_at: new Date().toISOString(),
+        }))
+        .filter(i => i.price > 0)
+        .slice(0, 10);
+
+      if (items.length > 0) {
+        // Delete old deals for this category
+        await supaFetch(
+          `/rest/v1/deals?category=eq.${cat}&found_at=lt.${new Date(Date.now() - 12*60*60*1000).toISOString()}`,
+          { method: 'DELETE' }
+        );
+        // Insert new deals
+        await supaFetch('/rest/v1/deals', {
+          method: 'POST',
+          body: items,
+          prefer: 'return=minimal',
+        });
+        console.log(`[SCAN] Saved ${items.length} deals for ${cat}`);
+      }
+
+      // Wait 2s between requests to avoid rate limiting
+      await new Promise(r => setTimeout(r, 2000));
+    } catch (err) {
+      console.error(`[SCAN] Error scanning ${cat}:`, err.message);
+    }
+  }
+  console.log('[SCAN] Done.');
 }
 
-// === PREMIUM ===
-function selectPlan(p,el){
-  document.querySelectorAll('.plan').forEach(e=>e.classList.remove('pop'));
-  el.classList.add('pop');
-  document.getElementById('sub-btn').textContent = p==='yearly'?'Start free trial — $2.99/mo':'Start free trial — $4.99/mo';
-}
-function isPremium(){ return localStorage.getItem('premium')==='true'; }
-function subscribe(){
-  showToast('Connecting to payment...');
-  setTimeout(()=>{ localStorage.setItem('premium','true'); showToast('Premium activated!'); }, 1500);
-}
-function renderProfile(){
-  document.getElementById('profile-plan').textContent = isPremium() ? 'Premium member' : 'Free plan';
-}
+// === CRON: run every 6 hours ===
+const SIX_HOURS = 6 * 60 * 60 * 1000;
+scanAndSave(); // run on startup
+setInterval(scanAndSave, SIX_HOURS);
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
+// === API: Get deals from Supabase ===
+app.get('/api/deals', async (req, res) => {
+  const cat = req.query.cat || 'all';
+  try {
+    let url = `/rest/v1/deals?select=*&order=found_at.desc&limit=20`;
+    if (cat !== 'all') url += `&category=eq.${cat}`;
 
-window.onload=()=>{
-  loadDeals('best deals today');
-  renderWatchlist();
-};
-</script>
-</body>
-</html>
+    const data = await supaFetch(url, {
+      headers: { 'Range': '0-19' }
+    });
+
+    res.json({ results: Array.isArray(data) ? data : [] });
+  } catch (err) {
+    console.error('Deals error:', err.message);
+    res.json({ results: [] });
+  }
+});
+
+// === API: Search live via SerpApi ===
+app.get('/api/search', async (req, res) => {
+  const q = req.query.q;
+  if (!q) return res.json({ results: [] });
+
+  try {
+    const data = await serpSearch(q);
+    const results = (data.shopping_results || [])
+      .filter(item => item.link && item.price)
+      .map((item, i) => ({
+        id: i,
+        name: item.title,
+        store: item.source,
+        price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
+        image: item.thumbnail || null,
+        link: item.link,
+        rating: item.rating ? parseFloat(item.rating) : null,
+        tag: item.tag || null,
+      }))
+      .filter(r => r.price > 0);
+
+    res.json({ results });
+  } catch (err) {
+    console.error('Search error:', err.message);
+    res.json({ results: [], error: 'Search failed' });
+  }
+});
+
+// === API: Compare prices for a product ===
+app.get('/api/compare', async (req, res) => {
+  const q = req.query.q;
+  if (!q) return res.json({ stores: [] });
+
+  try {
+    const data = await serpSearch(q, { num: 10 });
+    const stores = (data.shopping_results || [])
+      .filter(item => item.link && item.price)
+      .map(item => ({
+        name: item.source,
+        price: parseFloat(item.price?.replace(/[^0-9.]/g, '')) || 0,
+        link: item.link,
+        shipping: item.delivery || 'Check store',
+        rating: item.rating ? parseFloat(item.rating) : null,
+        image: item.thumbnail || null,
+      }))
+      .filter(r => r.price > 0)
+      .sort((a, b) => a.price - b.price)
+      .slice(0, 5);
+
+    if (stores.length > 0) stores[0].best = true;
+    res.json({ stores });
+  } catch (err) {
+    console.error('Compare error:', err.message);
+    res.json({ stores: [], error: 'Compare failed' });
+  }
+});
+
+// === Health check ===
+app.get('/health', (req, res) => res.json({
+  ok: true,
+  app: 'PriceHunt',
+  serp: !!SERP_KEY,
+  supabase: !!SUPA_URL,
+}));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`PriceHunt running on port ${PORT}`));
