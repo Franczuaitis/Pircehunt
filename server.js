@@ -44,20 +44,13 @@ function supaFetch(endpoint, options = {}) {
       let data = '';
       res.on('data', c => data += c);
       res.on('end', () => {
-        console.log(`[SUPA] ${options.method||'GET'} ${endpoint.slice(0,50)} → ${res.statusCode}`);
-        if (data) console.log(`[SUPA] Response: ${data.slice(0, 200)}`);
+        console.log('[SUPA]', options.method || 'GET', endpoint.slice(0, 60), '->', res.statusCode);
         try { resolve(data ? JSON.parse(data) : {}); }
         catch(e) { resolve({}); }
       });
     });
-    req.on('error', (e) => {
-      console.error('[SUPA] Request error:', e.message);
-      reject(e);
-    });
-    if (options.body) {
-      const body = JSON.stringify(options.body);
-      req.write(body);
-    }
+    req.on('error', (e) => { console.error('[SUPA] Error:', e.message); reject(e); });
+    if (options.body) req.write(JSON.stringify(options.body));
     req.end();
   });
 }
@@ -75,6 +68,11 @@ function serpSearch(query, extra = {}) {
   return httpGet('https://serpapi.com/search.json?' + params.toString());
 }
 
+// Wyciąga link z produktu SerpApi - używa product_link lub link
+function getLink(item) {
+  return item.product_link || item.link || null;
+}
+
 const SCAN_QUERIES = [
   { query: 'electronics deals discount', cat: 'electronics' },
   { query: 'nike adidas shoes sale', cat: 'fashion' },
@@ -88,7 +86,7 @@ const SCAN_QUERIES = [
 async function scanAndSave() {
   console.log('[SCAN] Starting deals scan...');
   if (!SERP_KEY || !SUPA_URL || !SUPA_KEY) {
-    console.log('[SCAN] Missing API keys:', { serp: !!SERP_KEY, supa_url: !!SUPA_URL, supa_key: !!SUPA_KEY });
+    console.log('[SCAN] Missing API keys');
     return;
   }
 
@@ -100,22 +98,22 @@ async function scanAndSave() {
       console.log('[SCAN] Raw results:', raw.length, 'for', cat);
 
       const items = raw
-        .filter(item => item.link && item.price)
+        .filter(item => getLink(item) && item.price)
         .map(item => ({
           name: item.title,
           store: item.source,
           price: parseFloat((item.price || '').replace(/[^0-9.]/g, '')) || 0,
           image: item.thumbnail || null,
-          link: item.link,
+          link: getLink(item),
           rating: item.rating ? parseFloat(item.rating) : null,
           category: cat,
-          tag: item.tag || null,
+          tag: item.tag || (item.extensions ? item.extensions.find(e => e.includes('OFF')) : null) || null,
           found_at: new Date().toISOString(),
         }))
         .filter(i => i.price > 0)
         .slice(0, 10);
 
-      console.log('[SCAN] Filtered items:', items.length, 'for', cat);
+      console.log('[SCAN] Valid items:', items.length, 'for', cat);
 
       if (items.length > 0) {
         const result = await supaFetch('/rest/v1/deals', {
@@ -123,7 +121,7 @@ async function scanAndSave() {
           body: items,
           prefer: 'return=representation',
         });
-        console.log('[SCAN] Saved to Supabase:', cat, Array.isArray(result) ? result.length : result);
+        console.log('[SCAN] Saved:', cat, Array.isArray(result) ? result.length + ' items' : JSON.stringify(result).slice(0, 100));
       }
 
       await new Promise(r => setTimeout(r, 2000));
@@ -157,14 +155,14 @@ app.get('/api/search', async (req, res) => {
   try {
     const data = await serpSearch(q);
     const results = (data.shopping_results || [])
-      .filter(item => item.link && item.price)
+      .filter(item => getLink(item) && item.price)
       .map((item, i) => ({
         id: i,
         name: item.title,
         store: item.source,
         price: parseFloat((item.price || '').replace(/[^0-9.]/g, '')) || 0,
         image: item.thumbnail || null,
-        link: item.link,
+        link: getLink(item),
         rating: item.rating ? parseFloat(item.rating) : null,
         tag: item.tag || null,
       }))
@@ -182,11 +180,11 @@ app.get('/api/compare', async (req, res) => {
   try {
     const data = await serpSearch(q, { num: 10 });
     const stores = (data.shopping_results || [])
-      .filter(item => item.link && item.price)
+      .filter(item => getLink(item) && item.price)
       .map(item => ({
         name: item.source,
         price: parseFloat((item.price || '').replace(/[^0-9.]/g, '')) || 0,
-        link: item.link,
+        link: getLink(item),
         shipping: item.delivery || 'Check store',
         rating: item.rating ? parseFloat(item.rating) : null,
         image: item.thumbnail || null,
