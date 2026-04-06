@@ -517,6 +517,9 @@ function showToast(msg) {
 }
 
 // Start
+  if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js');
+}
 window.onload = () => {
   renderWatchlist();
   loadDeals('all');
