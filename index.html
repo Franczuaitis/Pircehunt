@@ -18,7 +18,7 @@
 html,body{height:100%;overflow:hidden;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-size:15px;}
 .app{display:flex;flex-direction:column;height:100vh;height:100dvh;}
-.topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:rgba(250,250,248,0.92);border-bottom:1px solid var(--b);flex-shrink:0;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);}
+.topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:rgba(250,250,248,0.92);border-bottom:1px solid var(--b);flex-shrink:0;backdrop-filter:blur(20px);}
 .logo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--t);flex-shrink:0;letter-spacing:-0.3px;}
 .logo em{font-style:italic;color:var(--t2);}
 .sw{flex:1;position:relative;}
@@ -31,7 +31,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
 .content::-webkit-scrollbar{display:none;}
 .bottomnav{display:flex;background:rgba(250,250,248,0.95);border-top:1px solid var(--b);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(20px);}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;border:none;background:none;color:var(--t3);cursor:pointer;font-size:10px;font-family:'DM Sans',sans-serif;font-weight:500;transition:color .15s;letter-spacing:0.2px;}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;border:none;background:none;color:var(--t3);cursor:pointer;font-size:10px;font-family:'DM Sans',sans-serif;font-weight:500;transition:color .15s;}
 .nb.active{color:var(--t);}
 .ni{font-size:20px;line-height:1;}
 .page{display:none;padding:20px;animation:fu .2s ease;}
@@ -53,20 +53,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .dc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .2s;position:relative;box-shadow:var(--sh);}
 .dc:hover{box-shadow:var(--shm);transform:translateY(-2px);border-color:var(--b2);}
 .dc:active{transform:translateY(0);}
-.de{font-size:36px;display:flex;align-items:center;justify-content:center;height:72px;background:var(--s2);border-radius:var(--rsm);margin-bottom:12px;}
-.db{position:absolute;top:10px;left:10px;background:var(--t);color:white;font-size:9px;font-weight:600;padding:3px 7px;border-radius:99px;letter-spacing:0.06em;text-transform:uppercase;}
-.db.sale{background:var(--red);}
-.db.new{background:var(--blue);}
-.dn{font-size:13px;font-weight:500;margin-bottom:3px;line-height:1.35;}
+.de{width:100%;height:80px;background:var(--s2);border-radius:var(--rsm);margin-bottom:12px;object-fit:contain;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.de img{width:100%;height:100%;object-fit:contain;}
+.de-emoji{font-size:36px;}
+.dn{font-size:13px;font-weight:500;margin-bottom:3px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 .ds{font-size:11px;color:var(--t3);margin-bottom:8px;}
 .dp{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .dpn{font-family:'DM Serif Display',serif;font-size:18px;letter-spacing:-0.2px;}
-.dpw{font-size:11px;color:var(--t3);text-decoration:line-through;}
 .dps{font-size:10px;font-weight:600;color:var(--green);background:rgba(45,106,79,0.08);padding:2px 6px;border-radius:99px;}
 .pl{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
 .pc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:14px;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}
 .pc:hover{box-shadow:var(--shm);border-color:var(--b2);}
-.pe{width:60px;height:60px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.pe{width:60px;height:60px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;}
+.pe img{width:100%;height:100%;object-fit:contain;}
 .pi{flex:1;min-width:0;}
 .pn{font-size:14px;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pm{font-size:12px;color:var(--t2);margin-bottom:8px;}
@@ -83,37 +82,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .hs input:focus{border-color:var(--t);}
 .hs button{background:var(--t);border:none;border-radius:14px;padding:14px 22px;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;cursor:pointer;white-space:nowrap;transition:opacity .15s;}
 .hs button:active{opacity:0.75;}
-.fr{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;margin-bottom:14px;}
-.fr::-webkit-scrollbar{display:none;}
-.fi{flex-shrink:0;background:var(--s);border:1px solid var(--b);border-radius:99px;padding:6px 14px;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;color:var(--t2);}
-.fi.active{background:var(--t);border-color:var(--t);color:white;}
 .br{display:flex;align-items:center;gap:12px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--b);}
 .bb{background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;color:var(--t);font-family:'DM Sans',sans-serif;}
 .bt{font-size:15px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .cc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:16px;box-shadow:var(--sh);}
 .ch{padding:18px;border-bottom:1px solid var(--b);display:flex;gap:14px;align-items:center;}
-.cem{width:56px;height:56px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.cem{width:56px;height:56px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;}
+.cem img{width:100%;height:100%;object-fit:contain;}
 .ci h3{font-size:15px;font-weight:500;margin-bottom:4px;}
 .ci p{font-size:13px;color:var(--t2);}
 .sr{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b);gap:12px;transition:background .15s;}
 .sr:last-child{border:none;}
 .sr:hover{background:var(--s2);}
-.sem{width:36px;height:36px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
 .snw{flex:1;}
 .sn{font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px;}
 .ss{font-size:12px;color:var(--t2);margin-top:1px;}
-.bp{font-size:9px;font-weight:600;background:var(--green);color:white;padding:2px 6px;border-radius:99px;letter-spacing:0.04em;text-transform:uppercase;}
+.bp{font-size:9px;font-weight:600;background:var(--green);color:white;padding:2px 6px;border-radius:99px;text-transform:uppercase;}
 .srr{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
 .spr{font-family:'DM Serif Display',serif;font-size:18px;letter-spacing:-0.2px;}
 .spr.best{color:var(--green);}
-.bybtn{background:var(--t);border:none;border-radius:var(--rsm);padding:7px 14px;font-size:12px;font-weight:500;cursor:pointer;color:white;font-family:'DM Sans',sans-serif;transition:opacity .15s;}
+.bybtn{background:var(--t);border:none;border-radius:var(--rsm);padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;color:white;font-family:'DM Sans',sans-serif;transition:opacity .15s;}
 .bybtn:active{opacity:0.75;}
 .bybtn.sec{background:var(--s2);color:var(--t);border:1px solid var(--b2);}
-.hc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:18px;box-shadow:var(--sh);}
-.hl{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:14px;}
-.bars{display:flex;align-items:flex-end;gap:3px;height:56px;}
-.bar{flex:1;border-radius:3px 3px 0 0;}
-.blab{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:6px;}
 .wi{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:10px;box-shadow:var(--sh);}
 .we{width:44px;height:44px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 .wii{flex:1;}
@@ -121,7 +111,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .wt{font-size:12px;color:var(--t2);}
 .wpr{font-family:'DM Serif Display',serif;font-size:17px;}
 .wpr.hit{color:var(--green);}
-.wpr.close{color:#b45309;}
 .ph{background:var(--t);border-radius:20px;padding:28px 24px;margin-bottom:20px;color:white;text-align:center;}
 .ph h2{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px;letter-spacing:-0.4px;}
 .ph h2 em{font-style:italic;opacity:0.65;}
@@ -131,7 +120,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .plan.pop{background:white;border-color:white;}
 .plb{font-size:9px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:8px;display:inline-block;letter-spacing:0.06em;text-transform:uppercase;background:rgba(255,255,255,0.2);color:white;}
 .plan.pop .plb{background:var(--green);color:white;}
-.plna{font-size:11px;opacity:0.55;margin-bottom:4px;color:white;letter-spacing:0.04em;}
+.plna{font-size:11px;opacity:0.55;margin-bottom:4px;color:white;}
 .plan.pop .plna{color:var(--t2);opacity:1;}
 .plpr{font-family:'DM Serif Display',serif;font-size:26px;color:white;letter-spacing:-0.4px;}
 .plan.pop .plpr{color:var(--t);}
@@ -143,8 +132,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .fe{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.08);font-size:14px;opacity:0.75;}
 .fe:last-child{border:none;}
 .fck{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;}
-.ctabtn{background:white;border:none;border-radius:var(--r);padding:16px;width:100%;color:var(--t);font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;cursor:pointer;transition:opacity .15s;}
-.ctabtn:active{opacity:0.85;}
+.ctabtn{background:white;border:none;border-radius:var(--r);padding:16px;width:100%;color:var(--t);font-family:'DM Sans',sans-serif;font-weight:600;font-size:15px;cursor:pointer;}
 .ctan{font-size:11px;opacity:0.35;margin-top:10px;}
 .ptop{text-align:center;padding:28px 0 20px;}
 .av{width:72px;height:72px;border-radius:50%;background:var(--s2);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 14px;}
@@ -155,16 +143,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .mic{font-size:18px;width:22px;text-align:center;flex-shrink:0;}
 .mil{flex:1;font-size:14px;font-weight:500;}
 .mia{color:var(--t3);font-size:16px;}
-.ib{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;box-shadow:var(--sh);}
-.it{flex:1;}
-.it h4{font-size:14px;font-weight:500;margin-bottom:2px;}
-.it p{font-size:12px;color:var(--t2);}
-.ibtn{background:var(--t);border:none;border-radius:var(--rsm);padding:9px 14px;color:white;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--t);border-radius:99px;padding:11px 22px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;color:white;box-shadow:var(--shm);}
 .toast.show{opacity:1;}
 .loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px;color:var(--t2);font-size:14px;}
 .spin{width:18px;height:18px;border:2px solid var(--b2);border-top-color:var(--t);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
+.empty{text-align:center;padding:40px 20px;color:var(--t2);}
+.empty p{font-size:14px;margin-top:8px;}
 @media(max-width:360px){.dg{grid-template-columns:1fr;}.plans{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -181,56 +166,50 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 
   <div class="content" id="content">
     <div id="page-home" class="page active">
-      <div id="install-wrap" style="display:none">
-        <div class="ib">
-          <span style="font-size:26px">📲</span>
-          <div class="it"><h4>Add to Home Screen</h4><p>Get instant price alerts on your phone</p></div>
-          <button class="ibtn" onclick="installPWA()">Install</button>
-        </div>
-      </div>
       <div class="stats">
-        <div class="stat"><div class="sv">2.4M</div><div class="sl">Products</div></div>
-        <div class="stat"><div class="sv">12K</div><div class="sl">Stores</div></div>
-        <div class="stat"><div class="sv">$2.1M</div><div class="sl">Saved today</div></div>
+        <div class="stat"><div class="sv">12K+</div><div class="sl">Stores</div></div>
+        <div class="stat"><div class="sv">Live</div><div class="sl">Prices</div></div>
+        <div class="stat"><div class="sv">Free</div><div class="sl">To use</div></div>
       </div>
       <div class="cats" id="cats">
-        <div class="cat active" onclick="filterCat(this,'all')">All</div>
-        <div class="cat" onclick="filterCat(this,'electronics')">Electronics</div>
-        <div class="cat" onclick="filterCat(this,'fashion')">Fashion</div>
-        <div class="cat" onclick="filterCat(this,'home')">Home</div>
-        <div class="cat" onclick="filterCat(this,'sports')">Sports</div>
-        <div class="cat" onclick="filterCat(this,'beauty')">Beauty</div>
-        <div class="cat" onclick="filterCat(this,'gaming')">Gaming</div>
-        <div class="cat" onclick="filterCat(this,'books')">Books</div>
+        <div class="cat active" onclick="loadDeals('best deals today',this)">🔥 Hot</div>
+        <div class="cat" onclick="loadDeals('electronics deals',this)">Electronics</div>
+        <div class="cat" onclick="loadDeals('fashion sale',this)">Fashion</div>
+        <div class="cat" onclick="loadDeals('home appliances deal',this)">Home</div>
+        <div class="cat" onclick="loadDeals('sports equipment sale',this)">Sports</div>
+        <div class="cat" onclick="loadDeals('beauty products deal',this)">Beauty</div>
+        <div class="cat" onclick="loadDeals('gaming deals',this)">Gaming</div>
+        <div class="cat" onclick="loadDeals('books deals',this)">Books</div>
       </div>
       <div class="sh"><div class="st">Hot deals</div><span class="sa" onclick="navTo('search')">See all</span></div>
-      <div class="dg" id="hot-deals"></div>
-      <div class="sh"><div class="st">Biggest drops</div><span class="sa" onclick="navTo('search')">Browse</span></div>
+      <div class="dg" id="hot-deals"><div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div></div>
+      <div class="sh"><div class="st">Biggest drops</div></div>
       <div class="pl" id="price-drops"></div>
     </div>
 
     <div id="page-search" class="page">
       <div class="hero">
-        <div class="he">Compare prices</div>
+        <div class="he">Real prices · Live data</div>
         <h1>Find the <em>best price</em><br>anywhere</h1>
-        <p>We search 12,000+ stores so you don't have to</p>
+        <p>We search thousands of stores in real time</p>
         <div class="hs">
-          <input type="text" id="hero-search" placeholder="iPhone 16, Nike Air Max...">
+          <input type="text" id="hero-search" placeholder="Nike shoes, iPhone 16, PS5...">
           <button onclick="doSearch(document.getElementById('hero-search').value)">Search</button>
         </div>
       </div>
       <div id="search-results-wrap" style="display:none">
-        <div class="fr">
-          <div class="fi active">All</div>
-          <div class="fi" onclick="sortResults('price')">Lowest price</div>
-          <div class="fi" onclick="sortResults('discount')">Best deal</div>
-          <div class="fi" onclick="sortResults('rating')">Top rated</div>
-        </div>
         <div id="search-results"></div>
       </div>
       <div id="search-empty">
-        <div class="sh"><div class="st">Popular stores</div></div>
-        <div class="pl" id="featured-stores"></div>
+        <div class="sh"><div class="st">Try searching for...</div></div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span onclick="doSearch('Nike Air Max')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">Nike Air Max</span>
+          <span onclick="doSearch('iPhone 16')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">iPhone 16</span>
+          <span onclick="doSearch('PS5')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">PS5</span>
+          <span onclick="doSearch('MacBook Air')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">MacBook Air</span>
+          <span onclick="doSearch('Dyson vacuum')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">Dyson vacuum</span>
+          <span onclick="doSearch('AirPods Pro')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">AirPods Pro</span>
+        </div>
       </div>
     </div>
 
@@ -279,14 +258,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
       <div class="ptop">
         <div class="av">👤</div>
         <div class="pna">Guest</div>
-        <div class="ppl" id="profile-plan">Free · 3 searches remaining today</div>
+        <div class="ppl" id="profile-plan">Free plan</div>
       </div>
       <div class="mi" onclick="navTo('premium')"><span class="mic">⭐</span><span class="mil">Upgrade to Premium</span><span class="mia">›</span></div>
       <div class="mi" onclick="navTo('watch')"><span class="mic">🔔</span><span class="mil">Price Alerts</span><span class="mia">›</span></div>
-      <div class="mi" onclick="enablePush()"><span class="mic">📲</span><span class="mil">Enable Notifications</span><span class="mia" id="notif-status">›</span></div>
-      <div class="mi" onclick="installPWA()"><span class="mic">📱</span><span class="mil">Install App</span><span class="mia">›</span></div>
-      <div class="mi"><span class="mic">🌍</span><span class="mil">Currency & Region</span><span class="mia">›</span></div>
-      <div class="mi"><span class="mic">❓</span><span class="mil">Help & Support</span><span class="mia">›</span></div>
+      <div class="mi"><span class="mic">🌍</span><span class="mil">Currency and Region</span><span class="mia">›</span></div>
+      <div class="mi"><span class="mic">❓</span><span class="mil">Help and Support</span><span class="mia">›</span></div>
     </div>
   </div>
 
@@ -302,91 +279,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 
 <script>
 const TAG = 'pricehunt20-20';
-
-// Nazwy produktow bez apostrofow i cudzyslowow - bezpieczne dla onclick
-const DEALS = [
-  {id:1,name:'iPhone 16 Pro 256GB',store:'Amazon',emoji:'📱',price:999,was:1199,drop:17,badge:'hot',cat:'electronics'},
-  {id:2,name:'Samsung Galaxy S24 Ultra',store:'Samsung',emoji:'📱',price:899,was:1199,drop:25,badge:'sale',cat:'electronics'},
-  {id:3,name:'Samsung 65in QLED TV',store:'Best Buy',emoji:'📺',price:799,was:1299,drop:38,badge:'hot',cat:'electronics'},
-  {id:4,name:'LG OLED 55in C3',store:'Amazon',emoji:'📺',price:999,was:1499,drop:33,badge:'',cat:'electronics'},
-  {id:5,name:'AirPods Pro 2nd Gen',store:'Apple',emoji:'🎧',price:189,was:249,drop:24,badge:'sale',cat:'electronics'},
-  {id:6,name:'Sony WH-1000XM5 Headphones',store:'Sony',emoji:'🎧',price:249,was:399,drop:38,badge:'',cat:'electronics'},
-  {id:7,name:'MacBook Air M3 13in',store:'Apple',emoji:'💻',price:1099,was:1299,drop:15,badge:'',cat:'electronics'},
-  {id:8,name:'Dell XPS 15 OLED',store:'Dell',emoji:'💻',price:1299,was:1799,drop:28,badge:'sale',cat:'electronics'},
-  {id:9,name:'iPad Pro 12.9in M4',store:'Apple',emoji:'📱',price:999,was:1199,drop:17,badge:'new',cat:'electronics'},
-  {id:10,name:'Kindle Paperwhite 16GB',store:'Amazon',emoji:'📖',price:99,was:139,drop:29,badge:'sale',cat:'electronics'},
-  {id:11,name:'GoPro Hero 13 Black',store:'Amazon',emoji:'📷',price:299,was:399,drop:25,badge:'',cat:'electronics'},
-  {id:12,name:'DJI Mini 4 Pro Drone',store:'DJI',emoji:'🚁',price:759,was:959,drop:21,badge:'',cat:'electronics'},
-  {id:13,name:'Nike Air Max 270',store:'Nike',emoji:'👟',price:89,was:150,drop:41,badge:'sale',cat:'fashion'},
-  {id:14,name:'Adidas Ultraboost 24',store:'Adidas',emoji:'👟',price:119,was:180,drop:34,badge:'',cat:'fashion'},
-  {id:15,name:'Levis 501 Original Jeans',store:'Amazon',emoji:'👖',price:49,was:89,drop:45,badge:'hot',cat:'fashion'},
-  {id:16,name:'North Face Puffer Jacket',store:'Amazon',emoji:'🧥',price:149,was:250,drop:40,badge:'hot',cat:'fashion'},
-  {id:17,name:'Ray-Ban Wayfarer Sunglasses',store:'Amazon',emoji:'🕶️',price:99,was:163,drop:39,badge:'',cat:'fashion'},
-  {id:18,name:'Timberland 6in Premium Boot',store:'Amazon',emoji:'🥾',price:119,was:190,drop:37,badge:'',cat:'fashion'},
-  {id:19,name:'Calvin Klein T-Shirt 3-Pack',store:'Amazon',emoji:'👕',price:35,was:55,drop:36,badge:'sale',cat:'fashion'},
-  {id:20,name:'Converse Chuck Taylor All Star',store:'Amazon',emoji:'👟',price:45,was:70,drop:36,badge:'',cat:'fashion'},
-  {id:21,name:'Dyson V15 Detect Vacuum',store:'Dyson',emoji:'🌀',price:449,was:699,drop:36,badge:'',cat:'home'},
-  {id:22,name:'KitchenAid Stand Mixer 5qt',store:'Amazon',emoji:'🍰',price:279,was:449,drop:38,badge:'',cat:'home'},
-  {id:23,name:'Instant Pot Duo 7-in-1',store:'Amazon',emoji:'🍲',price:79,was:129,drop:39,badge:'sale',cat:'home'},
-  {id:24,name:'Nespresso Vertuo Next',store:'Amazon',emoji:'☕',price:99,was:179,drop:45,badge:'hot',cat:'home'},
-  {id:25,name:'Roomba i7 Plus Robot Vacuum',store:'Amazon',emoji:'🤖',price:399,was:599,drop:33,badge:'',cat:'home'},
-  {id:26,name:'Philips Hue Starter Kit',store:'Amazon',emoji:'💡',price:99,was:149,drop:34,badge:'',cat:'home'},
-  {id:27,name:'Ninja Air Fryer XL',store:'Amazon',emoji:'🍗',price:89,was:139,drop:36,badge:'sale',cat:'home'},
-  {id:28,name:'Weber Spirit II Gas Grill',store:'Amazon',emoji:'🔥',price:499,was:699,drop:29,badge:'',cat:'home'},
-  {id:29,name:'Peloton Bike Plus',store:'Peloton',emoji:'🚴',price:1999,was:2495,drop:20,badge:'',cat:'sports'},
-  {id:30,name:'Garmin Forerunner 265',store:'Amazon',emoji:'⌚',price:299,was:449,drop:33,badge:'sale',cat:'sports'},
-  {id:31,name:'Theragun Prime Massager',store:'Amazon',emoji:'💪',price:199,was:299,drop:33,badge:'',cat:'sports'},
-  {id:32,name:'Wilson Tennis Racket Pro',store:'Amazon',emoji:'🎾',price:89,was:139,drop:36,badge:'',cat:'sports'},
-  {id:33,name:'Hydro Flask 32oz Bottle',store:'Amazon',emoji:'🧴',price:35,was:50,drop:30,badge:'',cat:'sports'},
-  {id:34,name:'Fitbit Charge 6',store:'Amazon',emoji:'⌚',price:99,was:159,drop:38,badge:'sale',cat:'sports'},
-  {id:35,name:'Dyson Airwrap Complete',store:'Dyson',emoji:'💇',price:499,was:599,drop:17,badge:'',cat:'beauty'},
-  {id:36,name:'La Mer Moisturizing Cream',store:'Amazon',emoji:'🧴',price:189,was:280,drop:33,badge:'',cat:'beauty'},
-  {id:37,name:'Foreo Luna 4 Face Cleaner',store:'Amazon',emoji:'✨',price:99,was:179,drop:45,badge:'hot',cat:'beauty'},
-  {id:38,name:'Oral-B iO Series 9',store:'Amazon',emoji:'🦷',price:149,was:249,drop:40,badge:'sale',cat:'beauty'},
-  {id:39,name:'Charlotte Tilbury Palette',store:'Amazon',emoji:'💄',price:55,was:75,drop:27,badge:'',cat:'beauty'},
-  {id:40,name:'Tatcha Dewy Skin Cream',store:'Amazon',emoji:'🌸',price:68,was:89,drop:24,badge:'',cat:'beauty'},
-  {id:41,name:'PS5 Slim Console',store:'Amazon',emoji:'🎮',price:449,was:499,drop:10,badge:'',cat:'gaming'},
-  {id:42,name:'Xbox Series X',store:'Amazon',emoji:'🎮',price:399,was:499,drop:20,badge:'sale',cat:'gaming'},
-  {id:43,name:'Nintendo Switch OLED',store:'Amazon',emoji:'🕹️',price:299,was:349,drop:14,badge:'',cat:'gaming'},
-  {id:44,name:'SteelSeries Arctis Nova Pro',store:'Amazon',emoji:'🎧',price:199,was:349,drop:43,badge:'hot',cat:'gaming'},
-  {id:45,name:'Logitech G Pro X Superlight',store:'Amazon',emoji:'🖱️',price:99,was:159,drop:38,badge:'sale',cat:'gaming'},
-  {id:46,name:'Corsair K100 RGB Keyboard',store:'Amazon',emoji:'⌨️',price:149,was:229,drop:35,badge:'',cat:'gaming'},
-  {id:47,name:'Atomic Habits by James Clear',store:'Amazon',emoji:'📚',price:14,was:27,drop:48,badge:'hot',cat:'books'},
-  {id:48,name:'The Psychology of Money',store:'Amazon',emoji:'📚',price:12,was:20,drop:40,badge:'',cat:'books'},
-  {id:49,name:'Fourth Wing by Rebecca Yarros',store:'Amazon',emoji:'📖',price:16,was:29,drop:45,badge:'sale',cat:'books'},
-  {id:50,name:'Spare by Prince Harry',store:'Amazon',emoji:'📖',price:15,was:36,drop:58,badge:'hot',cat:'books'},
-];
-
-const STORES = [
-  {name:'Amazon',emoji:'📦',products:'350M+',shipping:'Free with Prime'},
-  {name:'eBay',emoji:'🏷️',products:'1.5B+',shipping:'Varies by seller'},
-  {name:'Walmart',emoji:'🛒',products:'75M+',shipping:'Free over $35'},
-  {name:'AliExpress',emoji:'🌏',products:'100M+',shipping:'Free worldwide'},
-  {name:'Best Buy',emoji:'🔷',products:'5M+',shipping:'Free over $35'},
-  {name:'Newegg',emoji:'💻',products:'3M+',shipping:'Free over $50'},
-];
-
-const WATCHLIST = [
-  {name:'MacBook Air M3',emoji:'💻',target:999,current:1099,alert:false},
-  {name:'Sony WH-1000XM5',emoji:'🎧',target:249,current:278,alert:true},
-  {name:'iPad Pro 12.9in',emoji:'📱',target:699,current:999,alert:false},
-];
-
 let currentPage = 'home';
 let prevPage = 'home';
+let currentProductLink = null;
 
-let deferredPrompt = null;
-if('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
-window.addEventListener('beforeinstallprompt', e=>{
-  e.preventDefault(); deferredPrompt=e;
-  document.getElementById('install-wrap').style.display='block';
-});
-function installPWA(){
-  if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; document.getElementById('install-wrap').style.display='none'; }); }
-  else showToast('iOS: Safari → Share → Add to Home Screen');
-}
-
-const PAGES=['home','search','product','watch','premium','profile'];
+const PAGES = ['home','search','product','watch','premium','profile'];
 function navTo(page, el){
   prevPage = currentPage;
   currentPage = page;
@@ -400,174 +297,209 @@ function navTo(page, el){
 }
 function goBack(){ navTo(prevPage); }
 
-function renderHome(list){
-  const d=list||DEALS;
-  document.getElementById('hot-deals').innerHTML=d.filter(x=>x.badge==='hot'||x.badge==='sale').slice(0,8).map(x=>`
-    <div class="dc" onclick="showProduct(${x.id})">
-      <div class="de">${x.emoji}</div>
-      ${x.badge?`<div class="db ${x.badge}">${x.badge}</div>`:''}
-      <div class="dn">${x.name}</div>
-      <div class="ds">${x.store}</div>
-      <div class="dp"><div class="dpn">$${x.price}</div><div class="dpw">$${x.was}</div><div class="dps">-${x.drop}%</div></div>
-    </div>`).join('');
-  document.getElementById('price-drops').innerHTML=d.slice().sort((a,b)=>b.drop-a.drop).slice(0,6).map(x=>`
-    <div class="pc" onclick="showProduct(${x.id})">
-      <div class="pe">${x.emoji}</div>
-      <div class="pi">
-        <div class="pn">${x.name}</div>
-        <div class="pm">Best price at ${x.store}</div>
-        <div class="pb"><div class="pp">$${x.price}</div><div class="pd">down ${x.drop}%</div></div>
-      </div>
-    </div>`).join('');
+function imgOrEmoji(url, fallback){
+  if(url) return `<img src="${url}" onerror="this.style.display='none';this.parentNode.innerHTML='<span class=de-emoji>${fallback}</span>'">`;
+  return `<span class="de-emoji">${fallback}</span>`;
 }
 
-let searchCount=parseInt(localStorage.getItem('searches')||'0');
-const FREE_LIMIT=3;
-function doSearch(q){
-  if(!q.trim()){showToast('Enter a product name');return;}
-  if(searchCount>=FREE_LIMIT&&!isPremium()){navTo('premium');showToast('Upgrade to search more');return;}
-  searchCount++;localStorage.setItem('searches',searchCount);
-  navTo('search');
-  document.getElementById('hero-search').value=q;
-  document.getElementById('top-search').value=q;
-  showSearchResults(q);
-}
-function showSearchResults(q){
-  document.getElementById('search-results-wrap').style.display='block';
-  document.getElementById('search-empty').style.display='none';
-  const r=document.getElementById('search-results');
-  r.innerHTML='<div class="loading"><div class="spin"></div>Searching 12,000+ stores...</div>';
-  setTimeout(()=>{
-    const f=DEALS.filter(d=>d.name.toLowerCase().includes(q.toLowerCase())||q.toLowerCase().includes(d.cat));
-    const s=f.length>0?f:DEALS;
-    r.innerHTML=s.map(d=>`
-      <div class="pc" onclick="showProduct(${d.id})">
-        <div class="pe">${d.emoji}</div>
-        <div class="pi">
-          <div class="pn">${d.name}</div>
-          <div class="pm">Found in ${Math.floor(Math.random()*8)+3} stores</div>
-          <div class="pb"><div class="pp">$${d.price}</div><div class="pd">-${d.drop}% off</div></div>
+// === LOAD DEALS (real data from SerpApi) ===
+async function loadDeals(query, el){
+  if(el){
+    document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active');
+  }
+  const hotDeals = document.getElementById('hot-deals');
+  const priceDrops = document.getElementById('price-drops');
+  hotDeals.innerHTML = `<div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading live deals...</div>`;
+  priceDrops.innerHTML = '';
+
+  try {
+    const res = await fetch(`/api/deals?cat=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    const items = data.results || [];
+
+    if(items.length === 0){
+      hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1"><p>No deals found. Try another category.</p></div>`;
+      return;
+    }
+
+    hotDeals.innerHTML = items.slice(0,6).map(d=>`
+      <div class="dc" onclick="showProductByItem(${d.id})">
+        <div class="de">${imgOrEmoji(d.image,'🛍️')}</div>
+        <div class="dn">${d.name}</div>
+        <div class="ds">${d.store}</div>
+        <div class="dp">
+          <div class="dpn">$${d.price.toFixed(2)}</div>
+          ${d.tag ? `<div class="dps">${d.tag}</div>` : ''}
         </div>
       </div>`).join('');
-  },800);
-}
-function sortResults(type){
-  document.querySelectorAll('.fi').forEach(f=>f.classList.remove('active'));
-  event.target.classList.add('active');
-  showToast('Sorted by '+type);
-}
-function renderFeaturedStores(){
-  document.getElementById('featured-stores').innerHTML=STORES.map(s=>`
-    <div class="pc">
-      <div class="pe">${s.emoji}</div>
-      <div class="pi">
-        <div class="pn">${s.name}</div>
-        <div class="pm">${s.products} products · ${s.shipping}</div>
-        <div class="pb"><div class="pd">Global store</div><div class="pd">Available</div></div>
-      </div>
-    </div>`).join('');
+
+    priceDrops.innerHTML = items.slice(6,12).map(d=>`
+      <div class="pc" onclick="showProductByItem(${d.id})">
+        <div class="pe">${imgOrEmoji(d.image,'🛍️')}</div>
+        <div class="pi">
+          <div class="pn">${d.name}</div>
+          <div class="pm">${d.store}</div>
+          <div class="pb"><div class="pp">$${d.price.toFixed(2)}</div><div class="pd">${d.rating ? '⭐ '+d.rating : ''}</div></div>
+        </div>
+      </div>`).join('');
+
+    window._dealsCache = items;
+  } catch(err){
+    hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1"><p>Could not load deals. Check connection.</p></div>`;
+  }
 }
 
-function showProduct(id){
-  const d=DEALS.find(x=>x.id===id); if(!d) return;
+// === SEARCH ===
+async function doSearch(q){
+  if(!q.trim()){ showToast('Enter a product name'); return; }
+  navTo('search');
+  document.getElementById('hero-search').value = q;
+  document.getElementById('top-search').value = q;
+  document.getElementById('search-results-wrap').style.display = 'block';
+  document.getElementById('search-empty').style.display = 'none';
+
+  const r = document.getElementById('search-results');
+  r.innerHTML = `<div class="loading"><div class="spin"></div>Searching live prices...</div>`;
+
+  try {
+    const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+    const data = await res.json();
+    const items = data.results || [];
+
+    if(items.length === 0){
+      r.innerHTML = `<div class="empty"><p>No results for "${q}". Try different keywords.</p></div>`;
+      return;
+    }
+
+    r.innerHTML = items.map(d=>`
+      <div class="pc" onclick="showProductByItem(${d.id}, '${encodeURIComponent(d.name)}')">
+        <div class="pe">${imgOrEmoji(d.image,'🛍️')}</div>
+        <div class="pi">
+          <div class="pn">${d.name}</div>
+          <div class="pm">${d.store} ${d.rating ? '· ⭐ '+d.rating : ''}</div>
+          <div class="pb">
+            <div class="pp">$${d.price.toFixed(2)}</div>
+            <div class="pd">${d.drop ? '-'+d.drop+'% off' : 'Live price'}</div>
+          </div>
+        </div>
+      </div>`).join('');
+
+    window._searchCache = items;
+  } catch(err){
+    r.innerHTML = `<div class="empty"><p>Search failed. Please try again.</p></div>`;
+  }
+}
+
+// === PRODUCT DETAIL ===
+async function showProductByItem(id, nameEncoded){
+  const cache = window._searchCache || window._dealsCache || [];
+  const d = cache.find(x=>x.id===id);
+  if(!d) return;
+  showProductDetail(d);
+}
+
+async function showProductDetail(d){
   navTo('product');
-  const stores=[
-    {name:'Amazon',emoji:'📦',price:d.price,shipping:'Free Prime',rating:4.7,best:true},
-    {name:'eBay',emoji:'🏷️',price:d.price+Math.floor(Math.random()*30)+10,shipping:'$4.99',rating:4.4,best:false},
-    {name:'Walmart',emoji:'🛒',price:d.price+Math.floor(Math.random()*20)+5,shipping:'Free $35+',rating:4.5,best:false},
-    {name:'Best Buy',emoji:'🔷',price:d.price+Math.floor(Math.random()*25)+8,shipping:'Free',rating:4.6,best:false},
-  ];
-  document.getElementById('product-detail').innerHTML=`
+  const detail = document.getElementById('product-detail');
+  detail.innerHTML = `
     <div class="br">
-      <button class="bb" onclick="goBack()">Back</button>
+      <button class="bb" onclick="goBack()">← Back</button>
       <div class="bt">${d.name}</div>
-      <span onclick="addToWatch(${d.id})" style="cursor:pointer;font-size:20px;flex-shrink:0">🔔</span>
     </div>
-    <div class="cc">
-      <div class="ch">
-        <div class="cem">${d.emoji}</div>
-        <div class="ci"><h3>${d.name}</h3><p>Best: <strong style="color:var(--green)">$${stores[0].price}</strong> on Amazon with free shipping</p></div>
+    <div class="loading"><div class="spin"></div>Comparing prices across stores...</div>`;
+
+  try {
+    const res = await fetch(`/api/compare?q=${encodeURIComponent(d.name)}`);
+    const data = await res.json();
+    const stores = data.stores || [];
+
+    if(stores.length === 0){
+      detail.innerHTML = `
+        <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
+        <div class="empty"><p>No price comparison available.</p></div>`;
+      return;
+    }
+
+    currentProductLink = stores[0].link;
+
+    detail.innerHTML = `
+      <div class="br">
+        <button class="bb" onclick="goBack()">← Back</button>
+        <div class="bt">${d.name}</div>
       </div>
-      ${stores.map(s=>`
-        <div class="sr">
-          <div class="sem">${s.emoji}</div>
-          <div class="snw">
-            <div class="sn">${s.name} ${s.best?'<span class="bp">best</span>':''}</div>
-            <div class="ss">Shipping: ${s.shipping} · ${s.rating} stars</div>
+      <div class="cc">
+        <div class="ch">
+          <div class="cem">${imgOrEmoji(d.image,'🛍️')}</div>
+          <div class="ci">
+            <h3>${d.name}</h3>
+            <p>Best price: <strong style="color:var(--green)">$${stores[0].price.toFixed(2)}</strong> at ${stores[0].name}</p>
           </div>
-          <div class="srr">
-            <div class="spr ${s.best?'best':''}">$${s.price}</div>
-            <button class="${s.best?'bybtn':'bybtn sec'}" onclick="goToStore('${s.name}','${d.name}')">Buy</button>
-          </div>
-        </div>`).join('')}
-    </div>
-    <div class="hc">
-      <div class="hl">Price history — last 3 months</div>
-      <div class="bars">
-        ${[120,115,130,125,d.was,d.was-10,d.price+30,d.price+20,d.price].map((v,i)=>`
-          <div class="bar" style="height:${Math.round(v/d.was*56)}px;background:${i===8?'var(--t)':'var(--s2)'}"></div>`).join('')}
+        </div>
+        ${stores.map(s=>`
+          <div class="sr">
+            <div class="snw">
+              <div class="sn">${s.name} ${s.best?'<span class="bp">best</span>':''}</div>
+              <div class="ss">${s.shipping || 'Check store'} ${s.rating ? '· ⭐ '+s.rating : ''}</div>
+            </div>
+            <div class="srr">
+              <div class="spr ${s.best?'best':''}">$${s.price.toFixed(2)}</div>
+              <button class="${s.best?'bybtn':'bybtn sec'}" onclick="window.open('${s.link}','_blank')">Buy →</button>
+            </div>
+          </div>`).join('')}
       </div>
-      <div class="blab"><span>3 months ago</span><span>Today</span></div>
-    </div>`;
+      <div style="background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;box-shadow:var(--sh);text-align:center">
+        <p style="font-size:13px;color:var(--t2);margin-bottom:12px">Best deal found — buy directly</p>
+        <button onclick="window.open('${stores[0].link}','_blank')" style="background:var(--green);border:none;border-radius:var(--r);padding:16px 32px;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;width:100%">
+          Buy for $${stores[0].price.toFixed(2)} at ${stores[0].name} →
+        </button>
+      </div>`;
+  } catch(err){
+    detail.innerHTML = `
+      <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
+      <div class="empty"><p>Could not load prices. Please try again.</p></div>`;
+  }
 }
 
-function goToStore(name, productName){
-  const q=encodeURIComponent(productName);
-  const urls={
-    'Amazon':`https://www.amazon.com/s?k=${q}&tag=${TAG}`,
-    'eBay':`https://www.ebay.com/sch/i.html?_nkw=${q}`,
-    'Walmart':`https://www.walmart.com/search?q=${q}`,
-    'Best Buy':`https://www.bestbuy.com/site/searchpage.jsp?st=${q}`,
-  };
-  window.open(urls[name]||`https://www.amazon.com/s?k=${q}&tag=${TAG}`,'_blank');
-}
-
-function addToWatch(id){showToast('Upgrade to Premium to set price alerts');}
-
+// === WATCHLIST ===
+const WATCHLIST = [
+  {name:'MacBook Air M3',emoji:'💻',target:999,current:1099},
+  {name:'Sony WH-1000XM5',emoji:'🎧',target:249,current:278},
+];
 function renderWatchlist(){
-  const el=document.getElementById('watchlist-items');
-  el.innerHTML=WATCHLIST.map(w=>`
+  document.getElementById('watchlist-items').innerHTML = WATCHLIST.map(w=>`
     <div class="wi">
       <div class="we">${w.emoji}</div>
       <div class="wii"><div class="wn">${w.name}</div><div class="wt">Alert below $${w.target}</div></div>
-      <div class="wpr ${w.current<=w.target?'hit':w.current<=w.target*1.1?'close':''}">${w.current<=w.target?'🎉 ':''}$${w.current}</div>
+      <div class="wpr ${w.current<=w.target?'hit':''}">${w.current<=w.target?'🎉 ':''}$${w.current}</div>
     </div>`).join('');
 }
 
-let selectedPlan='yearly';
+// === PREMIUM ===
 function selectPlan(p,el){
-  selectedPlan=p;
   document.querySelectorAll('.plan').forEach(e=>e.classList.remove('pop'));
   el.classList.add('pop');
-  document.getElementById('sub-btn').textContent=p==='yearly'?'Start free trial — $2.99/mo':'Start free trial — $4.99/mo';
+  document.getElementById('sub-btn').textContent = p==='yearly'?'Start free trial — $2.99/mo':'Start free trial — $4.99/mo';
 }
-function isPremium(){return localStorage.getItem('premium')==='true';}
+function isPremium(){ return localStorage.getItem('premium')==='true'; }
 function subscribe(){
   showToast('Connecting to payment...');
-  setTimeout(()=>{localStorage.setItem('premium','true');showToast('Premium activated!');},1500);
+  setTimeout(()=>{ localStorage.setItem('premium','true'); showToast('Premium activated!'); }, 1500);
 }
 function renderProfile(){
-  document.getElementById('profile-plan').textContent=isPremium()
-    ?'Premium member · Unlimited searches'
-    :`Free · ${Math.max(0,FREE_LIMIT-searchCount)} searches remaining today`;
+  document.getElementById('profile-plan').textContent = isPremium() ? 'Premium member' : 'Free plan';
 }
-async function enablePush(){
-  if(!('Notification' in window)){showToast('Notifications not supported');return;}
-  const p=await Notification.requestPermission();
-  if(p==='granted'){document.getElementById('notif-status').textContent='✓';showToast('Price alerts enabled!');}
-}
-function filterCat(el,cat){
-  document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  const f=cat==='all'?DEALS:DEALS.filter(d=>d.cat===cat);
-  renderHome(f.length>0?f:DEALS);
-}
+
 function showToast(msg){
   const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
+  t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
-window.onload=()=>{renderHome();renderFeaturedStores();renderWatchlist();};
+
+window.onload=()=>{
+  loadDeals('best deals today');
+  renderWatchlist();
+};
 </script>
 </body>
 </html>
