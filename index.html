@@ -8,108 +8,89 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="PriceHunt">
-<link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/icon.svg">
 <title>PriceHunt</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#fafaf8;--s:#ffffff;--s2:#f4f4f0;--b:rgba(0,0,0,0.08);--b2:rgba(0,0,0,0.14);--t:#111110;--t2:#6b6b68;--t3:#a8a8a5;--green:#2d6a4f;--red:#c0392b;--blue:#1a6fad;--r:16px;--rsm:10px;--sh:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);--shm:0 4px 16px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);}
+:root{--bg:#fafaf8;--s:#ffffff;--s2:#f4f4f0;--b:rgba(0,0,0,0.08);--b2:rgba(0,0,0,0.14);--t:#111110;--t2:#6b6b68;--t3:#a8a8a5;--green:#2d6a4f;--r:16px;--rsm:10px;--sh:0 1px 3px rgba(0,0,0,0.06);--shm:0 4px 16px rgba(0,0,0,0.08);}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-size:15px;}
 .app{display:flex;flex-direction:column;height:100vh;height:100dvh;}
-.topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:rgba(250,250,248,0.92);border-bottom:1px solid var(--b);flex-shrink:0;backdrop-filter:blur(20px);}
-.logo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--t);flex-shrink:0;letter-spacing:-0.3px;}
+.topbar{display:flex;align-items:center;gap:12px;padding:14px 20px;background:rgba(250,250,248,0.95);border-bottom:1px solid var(--b);flex-shrink:0;}
+.logo{font-family:'DM Serif Display',serif;font-size:22px;letter-spacing:-0.3px;}
 .logo em{font-style:italic;color:var(--t2);}
 .sw{flex:1;position:relative;}
-.sw input{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:12px;padding:10px 16px 10px 40px;color:var(--t);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .2s,background .2s;}
-.sw input:focus{border-color:var(--b2);background:var(--s);}
+.sw input{width:100%;background:var(--s2);border:1px solid var(--b);border-radius:12px;padding:10px 16px 10px 40px;color:var(--t);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;}
 .sw input::placeholder{color:var(--t3);}
-.si{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none;}
-.sbtn{background:var(--t);border:none;border-radius:10px;padding:10px 18px;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;cursor:pointer;flex-shrink:0;transition:opacity .15s;}
-.sbtn:active{opacity:0.75;}
-.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+.si{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--t3);}
+.sbtn{background:var(--t);border:none;border-radius:10px;padding:10px 18px;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;cursor:pointer;}
+.content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;}
 .content::-webkit-scrollbar{display:none;}
-.bottomnav{display:flex;background:rgba(250,250,248,0.95);border-top:1px solid var(--b);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);backdrop-filter:blur(20px);}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;border:none;background:none;color:var(--t3);cursor:pointer;font-size:10px;font-family:'DM Sans',sans-serif;font-weight:500;transition:color .15s;}
+.bottomnav{display:flex;background:rgba(250,250,248,0.95);border-top:1px solid var(--b);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;border:none;background:none;color:var(--t3);cursor:pointer;font-size:10px;font-family:'DM Sans',sans-serif;font-weight:500;}
 .nb.active{color:var(--t);}
 .ni{font-size:20px;line-height:1;}
-.page{display:none;padding:20px;animation:fu .2s ease;}
+.page{display:none;padding:20px;}
 .page.active{display:block;}
-@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
 .stat{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px 12px;text-align:center;box-shadow:var(--sh);}
-.sv{font-family:'DM Serif Display',serif;font-size:22px;letter-spacing:-0.3px;}
+.sv{font-family:'DM Serif Display',serif;font-size:22px;}
 .sl{font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);margin-top:3px;}
 .cats{display:flex;gap:6px;overflow-x:auto;padding:0 0 4px;scrollbar-width:none;margin-bottom:24px;}
 .cats::-webkit-scrollbar{display:none;}
-.cat{flex-shrink:0;background:var(--s);border:1px solid var(--b);border-radius:99px;padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;white-space:nowrap;color:var(--t2);}
-.cat:hover{border-color:var(--b2);color:var(--t);}
+.cat{flex-shrink:0;background:var(--s);border:1px solid var(--b);border-radius:99px;padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;color:var(--t2);}
 .cat.active{background:var(--t);border-color:var(--t);color:white;}
 .sh{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;}
-.st{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:-0.3px;}
-.sa{font-size:13px;color:var(--t2);cursor:pointer;font-weight:500;text-decoration:underline;text-underline-offset:3px;}
+.st{font-family:'DM Serif Display',serif;font-size:20px;}
+.sa{font-size:13px;color:var(--t2);cursor:pointer;font-weight:500;}
 .dg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;}
-.dc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .2s;position:relative;box-shadow:var(--sh);}
-.dc:hover{box-shadow:var(--shm);transform:translateY(-2px);border-color:var(--b2);}
-.dc:active{transform:translateY(0);}
+.dc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:14px;cursor:pointer;box-shadow:var(--sh);}
 .de{width:100%;height:80px;background:var(--s2);border-radius:var(--rsm);margin-bottom:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;}
 .de img{width:100%;height:100%;object-fit:contain;}
-.de-fb{font-size:36px;}
 .dn{font-size:13px;font-weight:500;margin-bottom:3px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 .ds{font-size:11px;color:var(--t3);margin-bottom:8px;}
-.dp{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.dpn{font-family:'DM Serif Display',serif;font-size:18px;letter-spacing:-0.2px;}
+.dp{display:flex;align-items:center;gap:6px;}
+.dpn{font-family:'DM Serif Display',serif;font-size:18px;}
 .dps{font-size:10px;font-weight:600;color:var(--green);background:rgba(45,106,79,0.08);padding:2px 6px;border-radius:99px;}
 .pl{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
-.pc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:14px;cursor:pointer;transition:all .2s;box-shadow:var(--sh);}
-.pc:hover{box-shadow:var(--shm);border-color:var(--b2);}
-.pe{width:60px;height:60px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;}
+.pc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:14px;cursor:pointer;box-shadow:var(--sh);}
+.pe{width:60px;height:60px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
 .pe img{width:100%;height:100%;object-fit:contain;}
 .pi{flex:1;min-width:0;}
 .pn{font-size:14px;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pm{font-size:12px;color:var(--t2);margin-bottom:8px;}
 .pb{display:flex;align-items:center;justify-content:space-between;}
-.pp{font-family:'DM Serif Display',serif;font-size:20px;letter-spacing:-0.3px;}
+.pp{font-family:'DM Serif Display',serif;font-size:20px;}
 .pd{font-size:12px;font-weight:600;color:var(--green);}
 .hero{padding:28px 0 20px;text-align:center;}
 .he{font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;}
-.hero h1{font-family:'DM Serif Display',serif;font-size:32px;line-height:1.15;margin-bottom:8px;letter-spacing:-0.5px;}
+.hero h1{font-family:'DM Serif Display',serif;font-size:32px;line-height:1.15;margin-bottom:8px;}
 .hero h1 em{font-style:italic;color:var(--t2);}
-.hero p{font-size:14px;color:var(--t2);margin-bottom:22px;line-height:1.6;}
+.hero p{font-size:14px;color:var(--t2);margin-bottom:22px;}
 .hs{display:flex;gap:8px;max-width:480px;margin:0 auto;}
-.hs input{flex:1;background:var(--s);border:1px solid var(--b2);border-radius:14px;padding:14px 18px;color:var(--t);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;box-shadow:var(--sh);}
-.hs input:focus{border-color:var(--t);}
-.hs button{background:var(--t);border:none;border-radius:14px;padding:14px 22px;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;cursor:pointer;white-space:nowrap;transition:opacity .15s;}
-.hs button:active{opacity:0.75;}
+.hs input{flex:1;background:var(--s);border:1px solid var(--b2);border-radius:14px;padding:14px 18px;color:var(--t);font-family:'DM Sans',sans-serif;font-size:15px;outline:none;}
+.hs button{background:var(--t);border:none;border-radius:14px;padding:14px 22px;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:15px;cursor:pointer;}
 .br{display:flex;align-items:center;gap:12px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--b);}
 .bb{background:var(--s2);border:1px solid var(--b);border-radius:var(--rsm);padding:7px 14px;font-size:13px;font-weight:500;cursor:pointer;color:var(--t);font-family:'DM Sans',sans-serif;}
 .bt{font-size:15px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .cc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);overflow:hidden;margin-bottom:16px;box-shadow:var(--sh);}
 .ch{padding:18px;border-bottom:1px solid var(--b);display:flex;gap:14px;align-items:center;}
-.cem{width:56px;height:56px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;overflow:hidden;}
+.cem{width:56px;height:56px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
 .cem img{width:100%;height:100%;object-fit:contain;}
 .ci h3{font-size:15px;font-weight:500;margin-bottom:4px;}
 .ci p{font-size:13px;color:var(--t2);}
-.sr{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b);gap:12px;transition:background .15s;}
+.sr{display:flex;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b);gap:12px;}
 .sr:last-child{border:none;}
-.sr:hover{background:var(--s2);}
 .snw{flex:1;}
 .sn{font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px;}
 .ss{font-size:12px;color:var(--t2);margin-top:1px;}
 .bp{font-size:9px;font-weight:600;background:var(--green);color:white;padding:2px 6px;border-radius:99px;text-transform:uppercase;}
 .srr{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
-.spr{font-family:'DM Serif Display',serif;font-size:18px;letter-spacing:-0.2px;}
+.spr{font-family:'DM Serif Display',serif;font-size:18px;}
 .spr.best{color:var(--green);}
-.bybtn{background:var(--t);border:none;border-radius:var(--rsm);padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;color:white;font-family:'DM Sans',sans-serif;transition:opacity .15s;}
-.bybtn:active{opacity:0.75;}
+.bybtn{background:var(--t);border:none;border-radius:var(--rsm);padding:9px 18px;font-size:13px;font-weight:500;cursor:pointer;color:white;font-family:'DM Sans',sans-serif;}
 .bybtn.sec{background:var(--s2);color:var(--t);border:1px solid var(--b2);}
-.hc{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:18px;box-shadow:var(--sh);}
-.hl{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:14px;}
-.bars{display:flex;align-items:flex-end;gap:3px;height:56px;}
-.bar{flex:1;border-radius:3px 3px 0 0;}
-.blab{display:flex;justify-content:space-between;font-size:10px;color:var(--t3);margin-top:6px;}
-.wi{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:10px;box-shadow:var(--sh);}
+.wi{background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:16px;display:flex;gap:12px;align-items:center;margin-bottom:10px;}
 .we{width:44px;height:44px;background:var(--s2);border-radius:var(--rsm);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 .wii{flex:1;}
 .wn{font-size:14px;font-weight:500;margin-bottom:2px;}
@@ -117,17 +98,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .wpr{font-family:'DM Serif Display',serif;font-size:17px;}
 .wpr.hit{color:var(--green);}
 .ph{background:var(--t);border-radius:20px;padding:28px 24px;margin-bottom:20px;color:white;text-align:center;}
-.ph h2{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px;letter-spacing:-0.4px;}
+.ph h2{font-family:'DM Serif Display',serif;font-size:28px;margin-bottom:8px;}
 .ph h2 em{font-style:italic;opacity:0.65;}
-.ph p{font-size:14px;opacity:0.6;margin-bottom:24px;line-height:1.6;}
+.ph p{font-size:14px;opacity:0.6;margin-bottom:24px;}
 .plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
-.plan{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;transition:all .15s;}
+.plan{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;}
 .plan.pop{background:white;border-color:white;}
-.plb{font-size:9px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:8px;display:inline-block;letter-spacing:0.06em;text-transform:uppercase;background:rgba(255,255,255,0.2);color:white;}
+.plb{font-size:9px;font-weight:600;padding:2px 8px;border-radius:99px;margin-bottom:8px;display:inline-block;text-transform:uppercase;background:rgba(255,255,255,0.2);color:white;}
 .plan.pop .plb{background:var(--green);color:white;}
 .plna{font-size:11px;opacity:0.55;margin-bottom:4px;color:white;}
 .plan.pop .plna{color:var(--t2);opacity:1;}
-.plpr{font-family:'DM Serif Display',serif;font-size:26px;color:white;letter-spacing:-0.4px;}
+.plpr{font-family:'DM Serif Display',serif;font-size:26px;color:white;}
 .plan.pop .plpr{color:var(--t);}
 .plpe{font-size:11px;opacity:0.45;color:white;margin-top:1px;}
 .plan.pop .plpe{color:var(--t2);opacity:1;}
@@ -141,20 +122,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
 .ctan{font-size:11px;opacity:0.35;margin-top:10px;}
 .ptop{text-align:center;padding:28px 0 20px;}
 .av{width:72px;height:72px;border-radius:50%;background:var(--s2);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 14px;}
-.pna{font-family:'DM Serif Display',serif;font-size:22px;letter-spacing:-0.3px;}
+.pna{font-family:'DM Serif Display',serif;font-size:22px;}
 .ppl{font-size:13px;color:var(--t2);margin-top:4px;}
-.mi{display:flex;align-items:center;gap:14px;padding:16px;background:var(--s);border:1px solid var(--b);border-radius:var(--r);margin-bottom:8px;cursor:pointer;box-shadow:var(--sh);transition:all .15s;}
-.mi:hover{border-color:var(--b2);}
+.mi{display:flex;align-items:center;gap:14px;padding:16px;background:var(--s);border:1px solid var(--b);border-radius:var(--r);margin-bottom:8px;cursor:pointer;}
 .mic{font-size:18px;width:22px;text-align:center;flex-shrink:0;}
 .mil{flex:1;font-size:14px;font-weight:500;}
 .mia{color:var(--t3);font-size:16px;}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--t);border-radius:99px;padding:11px 22px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;color:white;box-shadow:var(--shm);}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--t);border-radius:99px;padding:11px 22px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .25s;pointer-events:none;color:white;}
 .toast.show{opacity:1;}
 .loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px;color:var(--t2);font-size:14px;}
 .spin{width:18px;height:18px;border:2px solid var(--b2);border-top-color:var(--t);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .empty{text-align:center;padding:40px 20px;color:var(--t2);font-size:14px;}
-@media(max-width:360px){.dg{grid-template-columns:1fr;}.plans{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -176,16 +155,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
         <div class="stat"><div class="sv">Free</div><div class="sl">To use</div></div>
       </div>
       <div class="cats" id="cats">
-        <div class="cat active" onclick="loadDeals('all',this)">Hot</div>
-        <div class="cat" onclick="loadDeals('electronics',this)">Electronics</div>
-        <div class="cat" onclick="loadDeals('fashion',this)">Fashion</div>
-        <div class="cat" onclick="loadDeals('home',this)">Home</div>
-        <div class="cat" onclick="loadDeals('sports',this)">Sports</div>
-        <div class="cat" onclick="loadDeals('beauty',this)">Beauty</div>
-        <div class="cat" onclick="loadDeals('gaming',this)">Gaming</div>
-        <div class="cat" onclick="loadDeals('books',this)">Books</div>
+        <div class="cat active" id="cat-all" onclick="selectCat('all',this)">🔥 Hot</div>
+        <div class="cat" id="cat-electronics" onclick="selectCat('electronics',this)">Electronics</div>
+        <div class="cat" id="cat-fashion" onclick="selectCat('fashion',this)">Fashion</div>
+        <div class="cat" id="cat-home" onclick="selectCat('home',this)">Home</div>
+        <div class="cat" id="cat-sports" onclick="selectCat('sports',this)">Sports</div>
+        <div class="cat" id="cat-beauty" onclick="selectCat('beauty',this)">Beauty</div>
+        <div class="cat" id="cat-gaming" onclick="selectCat('gaming',this)">Gaming</div>
+        <div class="cat" id="cat-books" onclick="selectCat('books',this)">Books</div>
       </div>
-      <div class="sh"><div class="st">Hot deals</div><span class="sa" onclick="navTo('search')">See all</span></div>
+      <div class="sh"><div class="st" id="deals-title">Hot deals</div></div>
       <div class="dg" id="hot-deals"><div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div></div>
       <div class="sh"><div class="st">Biggest drops</div></div>
       <div class="pl" id="price-drops"></div>
@@ -201,9 +180,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
           <button onclick="doSearch(document.getElementById('hero-search').value)">Search</button>
         </div>
       </div>
-      <div id="search-results-wrap" style="display:none">
-        <div id="search-results"></div>
-      </div>
+      <div id="search-results-wrap" style="display:none"><div id="search-results"></div></div>
       <div id="search-empty">
         <div class="sh"><div class="st">Try searching for...</div></div>
         <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -211,7 +188,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
           <span onclick="doSearch('iPhone 16')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">iPhone 16</span>
           <span onclick="doSearch('PS5')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">PS5</span>
           <span onclick="doSearch('MacBook Air')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">MacBook Air</span>
-          <span onclick="doSearch('Dyson vacuum')" style="background:var(--s);border:1px solid var(--b);border-radius:99px;padding:8px 16px;font-size:13px;cursor:pointer">Dyson vacuum</span>
         </div>
       </div>
     </div>
@@ -222,7 +198,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
       <div class="sh"><div class="st">Price alerts</div></div>
       <div id="watchlist-items"></div>
       <div style="margin-top:16px">
-        <button onclick="navTo('premium')" style="background:var(--t);border:none;border-radius:var(--r);padding:15px;width:100%;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;cursor:pointer;">Set price alert — Premium</button>
+        <button onclick="showPage('premium')" style="background:var(--t);border:none;border-radius:var(--r);padding:15px;width:100%;color:white;font-family:'DM Sans',sans-serif;font-weight:500;font-size:14px;cursor:pointer;">Set price alert — Premium</button>
       </div>
     </div>
 
@@ -250,7 +226,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
           <div class="fe"><div class="fck">✓</div>Full price history charts</div>
           <div class="fe"><div class="fck">✓</div>All 12,000+ global stores</div>
           <div class="fe"><div class="fck">✓</div>AI price predictions</div>
-          <div class="fe"><div class="fck">✓</div>Multi-device sync</div>
         </div>
         <button class="ctabtn" onclick="subscribe()" id="sub-btn">Start free 7-day trial</button>
         <div class="ctan">Cancel anytime · No credit card required</div>
@@ -263,68 +238,80 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-s
         <div class="pna">Guest</div>
         <div class="ppl" id="profile-plan">Free plan</div>
       </div>
-      <div class="mi" onclick="navTo('premium')"><span class="mic">⭐</span><span class="mil">Upgrade to Premium</span><span class="mia">›</span></div>
-      <div class="mi" onclick="navTo('watch')"><span class="mic">🔔</span><span class="mil">Price Alerts</span><span class="mia">›</span></div>
+      <div class="mi" onclick="showPage('premium')"><span class="mic">⭐</span><span class="mil">Upgrade to Premium</span><span class="mia">›</span></div>
+      <div class="mi" onclick="showPage('watch')"><span class="mic">🔔</span><span class="mil">Price Alerts</span><span class="mia">›</span></div>
       <div class="mi"><span class="mic">🌍</span><span class="mil">Currency and Region</span><span class="mia">›</span></div>
       <div class="mi"><span class="mic">❓</span><span class="mil">Help and Support</span><span class="mia">›</span></div>
     </div>
   </div>
 
   <div class="bottomnav">
-    <button class="nb active" onclick="navTo('home')" id="nav-home"><span class="ni">🏠</span>Home</button>
-    <button class="nb" onclick="navTo('search',this)" id="nav-search"><span class="ni">🔍</span>Search</button>
-    <button class="nb" onclick="navTo('watch',this)" id="nav-watch"><span class="ni">🔔</span>Alerts</button>
-    <button class="nb" onclick="navTo('premium',this)" id="nav-premium"><span class="ni">⭐</span>Premium</button>
-    <button class="nb" onclick="navTo('profile',this)" id="nav-profile"><span class="ni">👤</span>Profile</button>
+    <button class="nb active" id="nav-home" onclick="goHome()"><span class="ni">🏠</span>Home</button>
+    <button class="nb" id="nav-search" onclick="showPage('search')"><span class="ni">🔍</span>Search</button>
+    <button class="nb" id="nav-watch" onclick="showPage('watch')"><span class="ni">🔔</span>Alerts</button>
+    <button class="nb" id="nav-premium" onclick="showPage('premium')"><span class="ni">⭐</span>Premium</button>
+    <button class="nb" id="nav-profile" onclick="showPage('profile')"><span class="ni">👤</span>Profile</button>
   </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-let currentPage = 'home';
+const PAGES = ['home','search','product','watch','premium','profile'];
 let prevPage = 'home';
+let currentPage = 'home';
 let currentCat = 'all';
 
-const PAGES = ['home','search','product','watch','premium','profile'];
-
-function navTo(page, el){
+// === NAWIGACJA ===
+function showPage(page) {
   prevPage = currentPage;
   currentPage = page;
-  PAGES.forEach(p=>{ const e=document.getElementById('page-'+p); if(e) e.classList.remove('active'); });
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
-  const pg=document.getElementById('page-'+page); if(pg) pg.classList.add('active');
-  const nb=document.getElementById('nav-'+page); if(nb) nb.classList.add('active'); else if(el) el.classList.add('active');
-  document.getElementById('content').scrollTop=0;
-  if(page==='watch') renderWatchlist();
-  if(page==='profile') renderProfile();
-  if(page==='home'){ 
-  currentCat='all'; 
-  document.getElementById('hot-deals').innerHTML='<div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div>';
-  document.getElementById('price-drops').innerHTML='';
-  loadDeals('all'); 
-}
+  PAGES.forEach(p => {
+    const el = document.getElementById('page-' + p);
+    if (el) el.classList.remove('active');
+  });
+  document.querySelectorAll('.nb').forEach(b => b.classList.remove('active'));
+  const pg = document.getElementById('page-' + page);
+  if (pg) pg.classList.add('active');
+  const nb = document.getElementById('nav-' + page);
+  if (nb) nb.classList.add('active');
+  document.getElementById('content').scrollTop = 0;
+  if (page === 'watch') renderWatchlist();
+  if (page === 'profile') renderProfile();
 }
 
-function goBack(){
-  navTo(prevPage);
-  // Jeśli wracamy do home, odśwież deale
-  if(prevPage === 'home'){
-    loadDeals(currentCat);
+// Przycisk Home na dole — zawsze wraca do strony głównej i odświeża
+function goHome() {
+  showPage('home');
+  // Reset do Hot i załaduj wszystkie
+  currentCat = 'all';
+  document.querySelectorAll('.cat').forEach(c => c.classList.remove('active'));
+  const catAll = document.getElementById('cat-all');
+  if (catAll) catAll.classList.add('active');
+  document.getElementById('deals-title').textContent = 'Hot deals';
+  loadDeals('all');
+}
+
+function goBack() {
+  if (prevPage === 'home') {
+    goHome();
+  } else {
+    showPage(prevPage);
   }
 }
 
-function imgEl(url, fallback){
-  if(url) return `<img src="${url}" onerror="this.parentNode.innerHTML='<span class=de-fb>${fallback}</span>'" style="width:100%;height:100%;object-fit:contain">`;
-  return `<span class="de-fb">${fallback}</span>`;
-}
-
-// === LOAD DEALS FROM SUPABASE ===
-async function loadDeals(cat, el, retry=false){
+// === KATEGORIE ===
+function selectCat(cat, el) {
   currentCat = cat;
-  if(el){
-    document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
-    el.classList.add('active');
-  }
+  document.querySelectorAll('.cat').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  const titles = {all:'Hot deals', electronics:'Electronics', fashion:'Fashion', home:'Home', sports:'Sports', beauty:'Beauty', gaming:'Gaming', books:'Books'};
+  document.getElementById('deals-title').textContent = titles[cat] || 'Deals';
+  loadDeals(cat);
+}
+
+// === LOAD DEALS ===
+async function loadDeals(cat, attempt) {
+  attempt = attempt || 1;
   const hotDeals = document.getElementById('hot-deals');
   const priceDrops = document.getElementById('price-drops');
   hotDeals.innerHTML = `<div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div>`;
@@ -335,20 +322,21 @@ async function loadDeals(cat, el, retry=false){
     const data = await res.json();
     const items = data.results || [];
 
-    if(items.length === 0){
-  if(!retry){
-    hotDeals.innerHTML = `<div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div>`;
-    setTimeout(()=>loadDeals(cat, null, true), 3000);
-  } else {
-    hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1">No deals found yet. Check back soon!</div>`;
-  }
-  return;
-}
+    if (items.length === 0) {
+      if (attempt < 3) {
+        // Retry — serwer może jeszcze się budzić
+        setTimeout(() => loadDeals(cat, attempt + 1), 3000);
+        return;
+      }
+      hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1">No deals found. Try another category.</div>`;
+      return;
     }
 
-    hotDeals.innerHTML = items.slice(0,6).map((d,i)=>`
-      <div class="dc" onclick="showProductFromDeals(${i})">
-        <div class="de">${imgEl(d.image,'🛍️')}</div>
+    window._dealsCache = items;
+
+    hotDeals.innerHTML = items.slice(0, 6).map((d, i) => `
+      <div class="dc" onclick="openDeal(${i})">
+        <div class="de">${d.image ? `<img src="${d.image}" onerror="this.style.display='none'">` : '🛍️'}</div>
         <div class="dn">${d.name}</div>
         <div class="ds">${d.store}</div>
         <div class="dp">
@@ -357,37 +345,38 @@ async function loadDeals(cat, el, retry=false){
         </div>
       </div>`).join('');
 
-    priceDrops.innerHTML = items.slice(6,12).map((d,i)=>`
-      <div class="pc" onclick="showProductFromDeals(${i+6})">
-        <div class="pe">${imgEl(d.image,'🛍️')}</div>
+    priceDrops.innerHTML = items.slice(6, 12).map((d, i) => `
+      <div class="pc" onclick="openDeal(${i + 6})">
+        <div class="pe">${d.image ? `<img src="${d.image}" onerror="this.style.display='none'">` : '🛍️'}</div>
         <div class="pi">
           <div class="pn">${d.name}</div>
           <div class="pm">${d.store}</div>
           <div class="pb">
             <div class="pp">$${parseFloat(d.price).toFixed(2)}</div>
-            <div class="pd">${d.tag || (d.rating ? '⭐ '+d.rating : '')}</div>
+            <div class="pd">${d.tag || (d.rating ? '⭐ ' + d.rating : '')}</div>
           </div>
         </div>
       </div>`).join('');
 
-    window._dealsCache = items;
-  } catch(err){
-    hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1">Could not load deals. Please try again.</div>`;
+  } catch (err) {
+    if (attempt < 3) {
+      setTimeout(() => loadDeals(cat, attempt + 1), 3000);
+    } else {
+      hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1">Could not load deals. Please try again.</div>`;
+    }
   }
 }
 
-// === SHOW PRODUCT FROM DEALS CACHE ===
-function showProductFromDeals(idx){
+function openDeal(idx) {
   const cache = window._dealsCache || [];
   const d = cache[idx];
-  if(!d) return;
-  showProductDetail(d);
+  if (d) showProductDetail(d);
 }
 
-// === SEARCH (live via SerpApi) ===
-async function doSearch(q){
-  if(!q.trim()){ showToast('Enter a product name'); return; }
-  navTo('search');
+// === SEARCH ===
+async function doSearch(q) {
+  if (!q.trim()) { showToast('Enter a product name'); return; }
+  showPage('search');
   document.getElementById('hero-search').value = q;
   document.getElementById('top-search').value = q;
   document.getElementById('search-results-wrap').style.display = 'block';
@@ -401,63 +390,57 @@ async function doSearch(q){
     const data = await res.json();
     const items = data.results || [];
 
-    if(items.length === 0){
+    if (items.length === 0) {
       r.innerHTML = `<div class="empty">No results for "${q}". Try different keywords.</div>`;
       return;
     }
 
     window._searchCache = items;
-
-    r.innerHTML = items.map((d,i)=>`
-      <div class="pc" onclick="showProductFromSearch(${i})">
-        <div class="pe">${imgEl(d.image,'🛍️')}</div>
+    r.innerHTML = items.map((d, i) => `
+      <div class="pc" onclick="openSearch(${i})">
+        <div class="pe">${d.image ? `<img src="${d.image}" onerror="this.style.display='none'">` : '🛍️'}</div>
         <div class="pi">
           <div class="pn">${d.name}</div>
-          <div class="pm">${d.store}${d.rating ? ' · ⭐ '+d.rating : ''}</div>
+          <div class="pm">${d.store}${d.rating ? ' · ⭐ ' + d.rating : ''}</div>
           <div class="pb">
             <div class="pp">$${parseFloat(d.price).toFixed(2)}</div>
             <div class="pd">${d.tag || 'Live price'}</div>
           </div>
         </div>
       </div>`).join('');
-  } catch(err){
+  } catch (err) {
     r.innerHTML = `<div class="empty">Search failed. Please try again.</div>`;
   }
 }
 
-function showProductFromSearch(idx){
+function openSearch(idx) {
   const cache = window._searchCache || [];
   const d = cache[idx];
-  if(!d) return;
-  showProductDetail(d);
+  if (d) showProductDetail(d);
 }
 
 // === PRODUCT DETAIL ===
-async function showProductDetail(d){
-  navTo('product');
+async function showProductDetail(d) {
+  showPage('product');
   const detail = document.getElementById('product-detail');
   detail.innerHTML = `
     <div class="br">
       <button class="bb" onclick="goBack()">← Back</button>
       <div class="bt">${d.name}</div>
     </div>
-    <div class="loading"><div class="spin"></div>Comparing prices across stores...</div>`;
+    <div class="loading"><div class="spin"></div>Comparing prices...</div>`;
 
   try {
     const res = await fetch('/api/compare?q=' + encodeURIComponent(d.name));
     const data = await res.json();
     const stores = data.stores || [];
 
-    if(stores.length === 0){
-      // Fallback - bezpośredni link do produktu
+    if (stores.length === 0) {
       detail.innerHTML = `
-        <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class=
-        "bt">${d.name}</div></div>
-        <div style="background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:24px;text-align:center;box-shadow:var(--sh)">
-          <div style="font-size:48px;margin-bottom:16px">${imgEl(d.image,'🛍️')}</div>
-          <h3 style="font-family:'DM Serif Display',serif;font-size:18px;margin-bottom:8px">${d.name}</h3>
+        <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
+        <div style="background:var(--s);border:1px solid var(--b);border-radius:var(--r);padding:24px;text-align:center">
           <p style="font-size:14px;color:var(--t2);margin-bottom:20px">${d.store} · $${parseFloat(d.price).toFixed(2)}</p>
-          <button onclick="window.open('${d.link}','_blank')" style="background:var(--t);border:none;border-radius:var(--r);padding:16px 32px;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;width:100%">
+          <button onclick="window.open('${d.link}','_blank')" style="background:var(--t);border:none;border-radius:var(--r);padding:16px;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;width:100%">
             Buy for $${parseFloat(d.price).toFixed(2)} at ${d.store} →
           </button>
         </div>`;
@@ -471,29 +454,28 @@ async function showProductDetail(d){
       </div>
       <div class="cc">
         <div class="ch">
-          <div class="cem">${imgEl(d.image,'🛍️')}</div>
+          <div class="cem">${d.image ? `<img src="${d.image}" onerror="this.style.display='none'">` : '🛍️'}</div>
           <div class="ci">
             <h3>${d.name}</h3>
             <p>Best: <strong style="color:var(--green)">$${stores[0].price.toFixed(2)}</strong> at ${stores[0].name}</p>
           </div>
         </div>
-        ${stores.map(s=>`
+        ${stores.map(s => `
           <div class="sr">
             <div class="snw">
-              <div class="sn">${s.name} ${s.best?'<span class="bp">best</span>':''}</div>
-              <div class="ss">${s.shipping || 'Check store'}${s.rating ? ' · ⭐ '+s.rating : ''}</div>
+              <div class="sn">${s.name} ${s.best ? '<span class="bp">best</span>' : ''}</div>
+              <div class="ss">${s.shipping || 'Check store'}${s.rating ? ' · ⭐ ' + s.rating : ''}</div>
             </div>
             <div class="srr">
-              <div class="spr ${s.best?'best':''}">$${s.price.toFixed(2)}</div>
-              <button class="${s.best?'bybtn':'bybtn sec'}" onclick="window.open('${s.link}','_blank')">Buy →</button>
+              <div class="spr ${s.best ? 'best' : ''}">$${s.price.toFixed(2)}</div>
+              <button class="${s.best ? 'bybtn' : 'bybtn sec'}" onclick="window.open('${s.link}','_blank')">Buy →</button>
             </div>
           </div>`).join('')}
       </div>
       <button onclick="window.open('${stores[0].link}','_blank')" style="background:var(--green);border:none;border-radius:var(--r);padding:16px;width:100%;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;margin-top:4px">
-        Best deal: $${stores[0].price.toFixed(2)} at ${stores[0].name} →
+        Best: $${stores[0].price.toFixed(2)} at ${stores[0].name} →
       </button>`;
-  } catch(err){
-    // Fallback na bezpośredni link
+  } catch (err) {
     detail.innerHTML = `
       <div class="br"><button class="bb" onclick="goBack()">← Back</button><div class="bt">${d.name}</div></div>
       <button onclick="window.open('${d.link}','_blank')" style="background:var(--t);border:none;border-radius:var(--r);padding:16px;width:100%;color:white;font-family:'DM Sans',sans-serif;font-weight:600;font-size:16px;cursor:pointer;">
@@ -503,43 +485,41 @@ async function showProductDetail(d){
 }
 
 // === WATCHLIST ===
-const WATCHLIST = [
-  {name:'MacBook Air M3',emoji:'💻',target:999,current:1099},
-  {name:'Sony WH-1000XM5',emoji:'🎧',target:249,current:278},
-];
-function renderWatchlist(){
-  document.getElementById('watchlist-items').innerHTML = WATCHLIST.map(w=>`
+function renderWatchlist() {
+  const items = [
+    {name:'MacBook Air M3',emoji:'💻',target:999,current:1099},
+    {name:'Sony WH-1000XM5',emoji:'🎧',target:249,current:278},
+  ];
+  document.getElementById('watchlist-items').innerHTML = items.map(w => `
     <div class="wi">
       <div class="we">${w.emoji}</div>
       <div class="wii"><div class="wn">${w.name}</div><div class="wt">Alert below $${w.target}</div></div>
-      <div class="wpr ${w.current<=w.target?'hit':''}">${w.current<=w.target?'🎉 ':''}$${w.current}</div>
+      <div class="wpr ${w.current <= w.target ? 'hit' : ''}">${w.current <= w.target ? '🎉 ' : ''}$${w.current}</div>
     </div>`).join('');
 }
 
-// === PREMIUM ===
-function selectPlan(p,el){
-  document.querySelectorAll('.plan').forEach(e=>e.classList.remove('pop'));
+function selectPlan(p, el) {
+  document.querySelectorAll('.plan').forEach(e => e.classList.remove('pop'));
   el.classList.add('pop');
-  document.getElementById('sub-btn').textContent = p==='yearly'?'Start free trial — $2.99/mo':'Start free trial — $4.99/mo';
+  document.getElementById('sub-btn').textContent = p === 'yearly' ? 'Start free trial — $2.99/mo' : 'Start free trial — $4.99/mo';
 }
-function isPremium(){ return localStorage.getItem('premium')==='true'; }
-function subscribe(){
+function subscribe() {
   showToast('Connecting to payment...');
-  setTimeout(()=>{ localStorage.setItem('premium','true'); showToast('Premium activated!'); }, 1500);
+  setTimeout(() => { localStorage.setItem('premium', 'true'); showToast('Premium activated!'); }, 1500);
 }
-function renderProfile(){
-  document.getElementById('profile-plan').textContent = isPremium() ? 'Premium member' : 'Free plan';
+function renderProfile() {
+  document.getElementById('profile-plan').textContent = localStorage.getItem('premium') === 'true' ? 'Premium member' : 'Free plan';
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
-}
-
-window.onload=()=>{
-  loadDeals('all');
+// Start
+window.onload = () => {
   renderWatchlist();
+  loadDeals('all');
 };
 </script>
 </body>
