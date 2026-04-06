@@ -319,7 +319,7 @@ function imgEl(url, fallback){
 }
 
 // === LOAD DEALS FROM SUPABASE ===
-async function loadDeals(cat, el){
+async function loadDeals(cat, el, retry=false){
   currentCat = cat;
   if(el){
     document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
@@ -336,8 +336,14 @@ async function loadDeals(cat, el){
     const items = data.results || [];
 
     if(items.length === 0){
-      hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1">No deals found yet. Check back soon!</div>`;
-      return;
+  if(!retry){
+    hotDeals.innerHTML = `<div class="loading" style="grid-column:1/-1"><div class="spin"></div>Loading deals...</div>`;
+    setTimeout(()=>loadDeals(cat, null, true), 3000);
+  } else {
+    hotDeals.innerHTML = `<div class="empty" style="grid-column:1/-1">No deals found yet. Check back soon!</div>`;
+  }
+  return;
+}
     }
 
     hotDeals.innerHTML = items.slice(0,6).map((d,i)=>`
